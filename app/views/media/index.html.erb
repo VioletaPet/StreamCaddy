@@ -1,6 +1,11 @@
 <h1>Movies</h1>
 <% @movies.each do |movie| %>
   <ul>
-    <li> <%= movie['title'] %></li>
+    <li> <%= link_to movie['title'], medium_path(id: movie['id'], title: movie['title']) %></li>
+  </ul>
+<% end %>
+<% @tvshows.each do |show| %>
+  <ul>
+    <li> <%= show['title'] %></li>
   </ul>
 <% end %>
