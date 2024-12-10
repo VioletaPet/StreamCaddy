@@ -30,7 +30,7 @@ class MediaController < ApplicationController
       directors = crew_data.select { |member| member['job'] == 'Director'}
       directors.first['name']
 
-      
+
       raise
 
       @media = Media.create(
@@ -56,5 +56,17 @@ class MediaController < ApplicationController
   def create
 
   end
+
+  end
+
+  def search
+    provider_id = params[:search][:provider]
+    provider_id.delete_at(0)
+
+    @movies = TmdbService.watch_providers(provider_id)
+
+  end
+
+  private
 
 end
