@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_09_164823) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_10_111547) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,14 +32,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_09_164823) do
   end
 
   create_table "genres", force: :cascade do |t|
-    t.string "type"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "media", force: :cascade do |t|
     t.string "title"
-    t.string "type"
+    t.string "category"
     t.text "synopsis"
     t.string "creator"
     t.integer "api_id"
