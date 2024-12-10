@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_10_111547) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_10_160112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -107,12 +107,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_10_111547) do
   end
 
   create_table "user_providers", force: :cascade do |t|
-    t.bigint "watch_providers_id", null: false
-    t.bigint "users_id", null: false
+    t.bigint "watch_provider_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["users_id"], name: "index_user_providers_on_users_id"
-    t.index ["watch_providers_id"], name: "index_user_providers_on_watch_providers_id"
+    t.index ["user_id"], name: "index_user_providers_on_user_id"
+    t.index ["watch_provider_id"], name: "index_user_providers_on_watch_provider_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -157,8 +157,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_10_111547) do
   add_foreign_key "reviews", "media", column: "media_id"
   add_foreign_key "reviews", "users"
   add_foreign_key "seasons", "media", column: "media_id"
-  add_foreign_key "user_providers", "users", column: "users_id"
-  add_foreign_key "user_providers", "watch_providers", column: "watch_providers_id"
+  add_foreign_key "user_providers", "users"
+  add_foreign_key "user_providers", "watch_providers"
   add_foreign_key "watchlist_media", "media", column: "media_id"
   add_foreign_key "watchlist_media", "users"
 end
