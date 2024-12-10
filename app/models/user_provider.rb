@@ -1,4 +1,4 @@
 class UserProvider < ApplicationRecord
-  belongs_to :watch_providers
-  belongs_to :users
+  belongs_to :watch_provider
+  belongs_to :user
 end

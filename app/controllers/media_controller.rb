@@ -6,8 +6,17 @@ class MediaController < ApplicationController
   end
 
   def new
-    
+
   end
 
+  def search
+    provider_id = params[:search][:provider]
+    provider_id.delete_at(0)
+
+    @movies = TmdbService.watch_providers(provider_id)
+
+  end
+
+  private
 
 end
