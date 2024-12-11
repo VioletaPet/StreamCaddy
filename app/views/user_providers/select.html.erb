@@ -1,0 +1,9 @@
+<%= simple_form_for(:user_provider_selection, url: user_providers_path, method: :post) do |f| %>
+  <%= f.input :watch_provider_ids,
+              as: :check_boxes,
+              collection: @available_providers.all.map { |provider| [provider.name, provider.id] },
+              input_html: { multiple: true },
+              prompt: "Select a streaming platform" %>
+  <%= f.submit "Select", class: "btn btn-primary" %>
+  <%= link_to "Back", user_providers_path, class: "btn btn-outline-primary" %>
+<% end %>
