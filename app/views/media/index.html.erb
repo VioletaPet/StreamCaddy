@@ -10,7 +10,7 @@
 <% end %>
 <% @tvshows.each do |show| %>
   <ul>
-    <li> <%= show['name'] %></li>
+    <li> <%= link_to show['name'],  medium_path(id: show['id'], title: show['name'])%></li>
   </ul>
 <% end %>
 

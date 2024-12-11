@@ -27,7 +27,7 @@
             <h5>Cast</h5>
             <ul>
                 <% @media.media_actors.each do |member| %>
-                    <li><%= member.actor[:name] %> as <%= member[:character] %></li>
+                    <li><%= member.actor[:name] %> as <%= member[:character] %> <%= link_to 'bio', actor_show_path(member.actor_id) %></li>
                 <% end %>
 
             </ul>
