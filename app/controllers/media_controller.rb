@@ -10,8 +10,7 @@ class MediaController < ApplicationController
   end
 
   def search
-    provider_id = params[:search][:provider]
-    provider_id.delete_at(0)
+    provider_id = params[:search][:provider].drop(1)
 
     @movies = TmdbService.watch_providers(provider_id)
 

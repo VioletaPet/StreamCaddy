@@ -26,14 +26,8 @@ class TmdbService
     require 'uri'
     require 'net/http'
 
-    if provider.count == 1
-      url = URI("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_watch_providers=#{provider[0]}&watch_region=US")
-    else
-      source = provider[0]
-      provider.delete_at(0)
-      provider.each do |p|
-        source += "%7C#{p}"
-      end
+    if provider.any?
+      source = provider.join("7%C")
       url = URI("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_watch_providers=#{source}&watch_region=US")
     end
 
