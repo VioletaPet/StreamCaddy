@@ -25,14 +25,14 @@ class TmdbService
   def self.watch_providers(provider)
 
     if provider.count == 1
-      url = URI("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_watch_providers=#{provider[0]}&watch_region=US")
+      url = URI("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_watch_providers=#{provider[0]}&watch_region=GB")
     else
       source = provider[0]
       provider.delete_at(0)
       provider.each do |p|
         source += "%7C#{p}"
       end
-      url = URI("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_watch_providers=#{source}&watch_region=US")
+      url = URI("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_watch_providers=#{source}&watch_region=GB")
     end
 
 
@@ -91,6 +91,7 @@ class TmdbService
     JSON.parse(response.read_body)
   end
 
+
   def self.fetch_cast_details(media_type, media_id)
 
     url = URI("https://api.themoviedb.org/3/#{media_type}/#{media_id}/credits?language=en-US")
@@ -106,6 +107,60 @@ class TmdbService
     JSON.parse(response.read_body)
   end
 
+  def self.fetch_media_watch_providers(media_type, media_id)
+    url = URI("https://api.themoviedb.org/3/#{media_type}/#{media_id}/watch/providers")
 
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+    request["Authorization"] = "Bearer #{API_KEY}"
+
+    response = http.request(request)
+    JSON.parse(response.read_body)
+  end
+
+  def self.fetch_media_images(media_type, media_id)
+    url = URI("https://api.themoviedb.org/3/#{media_type}/#{media_id}/images")
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+    request["Authorization"] = "Bearer #{API_KEY}"
+
+    response = http.request(request)
+    JSON.parse(response.read_body)
+  end
+
+  def self.fetch_media_videos(media_type, media_id)
+    url = URI("https://api.themoviedb.org/3/#{media_type}/#{media_id}/videos?language=en-US")
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+    request["Authorization"] = "Bearer #{API_KEY}"
+
+    response = http.request(request)
+    JSON.parse(response.read_body)
+  end
+
+  def self.fetch_cast_member_details(member_id)
+    url = URI("https://api.themoviedb.org/3/person/#{member_id}?language=en-US")
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+    request["Authorization"] = "Bearer #{API_KEY}"
+
+    response = http.request(request)
+    JSON.parse(response.read_body)
+  end
 
 end

@@ -8,43 +8,17 @@ class MediaController < ApplicationController
 
   def show
 
-    media_id = params[:id]
-    media_title = params[:title]
+    @media_id = params[:id]
+    @media_title = params[:title]
 
-    @media = Media.find_by(api_id: media_id)
+
+
+    @media = Media.find_by(api_id: @media_id)
 
     if @media
       render 'show'
     else
-      media_result = TmdbService.search_tv_movie(params[:title])
-      first_result = media_result['results'][0]
-
-      media_id = first_result['id']
-      media_type = first_result['media_type']
-      media_data = TmdbService.fetch_media_details(media_type, media_id)
-
-      all_cast_data = TmdbService.fetch_cast_details(media_type, media_id)
-      cast_data = all_cast_data['cast']
-      crew_data = all_cast_data['crew']
-
-      directors = crew_data.select { |member| member['job'] == 'Director'}
-      directors.first['name']
-
-
-      raise
-
-      @media = Media.create(
-        title: media_data['title'],
-        category: media_type,
-        synopsis: media_data['overview'],
-        creator: director.first['name'],
-        api_id: media_id,
-        release_date: media_data['release_date'],
-        run_time: media_data['runtime']
-        )
-
-
-
+      create
     end
 
   end
@@ -54,10 +28,37 @@ class MediaController < ApplicationController
   end
 
   def create
-
+    media_result = TmdbService.search_tv_movie(@media_title)
+    media_type = media_result['results'][0]['media_type']
+    media_data = TmdbService.fetch_media_details(media_type, @media_id)
+    cast_crew_data = TmdbService.fetch_cast_details(media_type, @media_id)
+    cast_data = cast_crew_data['cast']
+    crew_data = cast_crew_data['crew']
+    if media_type == 'movie'
+      creator = crew_data.select { |member| member['job'] == 'Director' }.first
+    else
+      creator = crew_data.sort_by { |crew_data| -crew_data['popularity'] }.first
+    end
+    watch_providers_data = TmdbService.fetch_media_watch_providers(media_type, @media_id)['results']['GB']
+    photo_data = TmdbService.fetch_media_images(media_type, @media_id)
+    poster_data = photo_data['posters'][0]
+    backdrops_data = photo_data['backdrops'].first(10)
+    video_data = TmdbService.fetch_media_videos(media_type, @media_id)['results']
+    filtered_videos = video_data.select do |video|
+      video['type'] == 'Trailer' && video['official'] && video['site'] == 'YouTube'
+    end
+    sorted_videos = filtered_videos.sort_by do |video|
+      [-video['size'], video['published_at']]
+    end
+    best_video = sorted_videos.first
+    if best_video
+      video_data = best_video
+    else
+      video_data.first
+    end
+    media = MediaService.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data)
   end
 
-  end
 
   def search
     provider_id = params[:search][:provider]
