@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get 'user_providers/index'
-  get 'user_providers/new'
-  get 'user_providers/create'
   devise_for :users
   root to: "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -14,6 +11,7 @@ Rails.application.routes.draw do
   get "actor/show", to: "actor#show"
   # Defines the root path route ("/")
   # root "posts#index"
-  resources :user_provider, only: [:index, :new, :create]
   resources :watchlist_media, only: [:index, :show, :create, :destroy]
+  resources :user_providers, only: [:index, :new, :create, :destroy]
+  get "user_providers/select", to: "user_providers#select"
 end
