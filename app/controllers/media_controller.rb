@@ -57,11 +57,8 @@ class MediaController < ApplicationController
     end
 
     @media = MediaService.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data)
-    if @media
-      redirect_to medium_path(@media)
-    else
-      redirect_to root_path, alert: "Failed to create media."
-    end
+
+    render 'show'
   end
 
 
