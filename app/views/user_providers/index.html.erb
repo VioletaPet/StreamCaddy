@@ -1,6 +1,14 @@
-<h1>UserProviders#index</h1>
-<p>Find me in app/views/user_providers/index.html.erb</p>
-<%# Display streaming platforms %>
-<%# Create a button with the option to select them? %>
-
-<h1>Your Streaming Platforms</h1>
+<div class="user-providers-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+  <h1>Your Streaming Platforms</h1>
+  <div class="providers d-flex mb-3">
+    <% @user_providers.each do |provider| %>
+      <div class="provider-card bg-white" style="display: flex; justify-content: center; align-items: center; margin-right: 15px; padding: 20px; height: 50px; witdh: 150px">
+        <span>
+          <%= provider.name %>
+          <%= link_to "x", user_provider_path(provider), data: {turbo_method: :delete}, class: "btn btn-outline-danger btn-sm", style: "border-radius: 50%" %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <%= link_to "Add", user_providers_select_path, class: "btn btn-primary" %>
+</div>

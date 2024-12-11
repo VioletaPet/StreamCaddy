@@ -11,6 +11,6 @@ Rails.application.routes.draw do
   get "actor/show", to: "actor#show"
   # Defines the root path route ("/")
   # root "posts#index"
-  resources :user_providers, only: [:index, :new, :create]
+  resources :user_providers, only: [:index, :new, :create, :destroy]
   get "user_providers/select", to: "user_providers#select"
 end
