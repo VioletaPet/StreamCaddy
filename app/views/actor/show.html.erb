@@ -1,0 +1,4 @@
+<h1><%= @actor.name %></h1>
+<%= raise %>
+<p><%= @actor.bio %></p>
+<%= cl_image_tag @actor.photos.first.key, alt: "#{@actor.name} Poster", class: "img-fluid rounded" %>

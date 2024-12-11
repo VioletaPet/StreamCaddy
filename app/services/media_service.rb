@@ -8,7 +8,7 @@ class MediaService
         m.title = media_data['title'] || m.title = media_data['name']
         m.category = media_type
         m.synopsis = media_data['overview']
-        m.creator = creator['name']
+        m.creator = creator['name'] || "N/A'"
         m.release_date = media_data['release_date'] || m.release_date = media_data['first_air_date']
         m.run_time = media_data['runtime']
 
@@ -49,6 +49,11 @@ class MediaService
       actor = Actor.find_or_create_by(api_id: cast_member['id']) do |a|
         a.name = cast_member['name']
         a.bio = member_details['biography']
+
+      end
+      if cast_member['profile_path'].present? && !actor.photos.attached?
+        profile_url = "https://image.tmdb.org/t/p/original#{cast_member['profile_path']}"
+        actor.photos.attach(io: URI.open(profile_url), filename: File.basename(profile_url), content_type: 'image/jpeg')
       end
       MediaActor.create!(media_id: media['id'], actor_id: actor['id'] , character: cast_member['character'])
     end
