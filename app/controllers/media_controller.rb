@@ -2,6 +2,7 @@ require_dependency '../services/tmdb_service.rb'
 
 class MediaController < ApplicationController
   def index
+    @watch_providers = WatchProvider.all.pluck(:name, :api_id)
     @movies = TmdbService.fetch_movies
     @tvshows = TmdbService.fetch_tv
   end
@@ -18,7 +19,6 @@ class MediaController < ApplicationController
     else
       redirect_to new_media_path(id: params[:id], title: params[:title])
     end
-
   end
 
   def new
@@ -27,7 +27,6 @@ class MediaController < ApplicationController
 
   def create
     media_result = TmdbService.search_tv_movie(params['title'])
-    yield
     media_type = media_result['results'][0]['media_type']
     media_data = TmdbService.fetch_media_details(media_type, params[:id])
     cast_crew_data = TmdbService.fetch_cast_details(media_type, params[:id])
@@ -63,10 +62,11 @@ class MediaController < ApplicationController
 
 
   def search
-    @watch = WatchProvider.all.pluck(:name, :id)
-    yield
-    provider_id = params[:search][:provider]&.drop(1)
-    @media = TmdbService.watch_providers(provider_id)
+    provider_id = params[:search][:provider]&.reject(&:blank?)
+    @chosen_providers = WatchProvider.where(api_id: provider_id)
+
+    @movies = TmdbService.watch_providers_movies(provider_id)
+    @tvshows = TmdbService.watch_providers_tv(provider_id)
 
   end
 
