@@ -1,6 +1,6 @@
 <h1>Movies</h1>
 <%= simple_form_for :search, url: media_search_path, method: :get, input_html: { class: 'd-flex align-items-center' } do |f| %>
-  <%= f.input :provider, as: :check_boxes, collection: @watch_providers, input_html: { multiple: true }, prompt: "Select a provider" %>
+  <%= f.input :provider, as: :select, collection: @watch_providers, input_html: { multiple: true, class: 'form-control' }, prompt: "Select a provider" %>
   <button type="submit">button</button>
 <% end %>
 <% @movies.each do |movie| %>
