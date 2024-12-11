@@ -11,8 +11,7 @@ class MediaController < ApplicationController
     @media_id = params[:id]
     @media_title = params[:title]
 
-    @media = Media.find_by(api_id: @media_id)
-
+    @media = Media.find_by(id: @media_id)
     if @media
       render 'show'
     else

@@ -20,10 +20,7 @@ class WatchlistMediaController < ApplicationController
 
   def destroy
     @watchlist_media = current_user.watchlist_media.find(params[:id])
-    if @watchlist_media.destroy
-      redirect_to watchlist_media_index_path, notice: 'Item has been removed from Watchlist'
-    else
-      redirect_to watchlist_media_index_path, alert: 'Failed to delete Item'
-    end
+    @watchlist_media.destroy
+    redirect_to watchlist_media_path, status: :see_other
   end
 end
