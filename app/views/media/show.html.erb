@@ -41,6 +41,17 @@
                 <% end %>
             </ul>
         </div>
+
+        <div class="row mt-4">
+        <% if current_user.watchlist_media.exists?(media_id: @media.id) %>
+        <button class="btn btn-secondary" disabled>Already in Watchlist</button>
+        <% else %>
+        <%= button_to 'Add to watchlist', watchlist_media_path(media_id: @media.id), method: :post, class: 'btn btn-primary' %>
+        <% end %>
+        </div>
+        <div>
+        <button class="mt-3"><%= link_to 'View my watchlist', watchlist_media_path(media_id: @media.id) %>
+        </div>
     </div>
     <div class="row mt-4">
         <h5>Backdrops</h5>

@@ -1,0 +1,32 @@
+<div class="container mt-5">
+
+  <h1>My Fabulous Watchlist</h1>
+
+  <div class="row">
+    <% @watchlist.each do |item| %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <% if item.media.poster.present? %>
+            <img src="<%= url_for(item.media.poster) %>" class="card-img-top" alt="<%= item.media.title %> Poster">
+          <% else %>
+            <div class="card-img-top text-center bg-secondary text-white py-5">
+              <p>No Poster Available</p>
+            </div>
+          <% end %>
+
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= link_to item.media.title, medium_path(id: item.media.id, title: item.media.title) %>
+            </h5>
+            <%= button_to 'Remove from Watchlist', watchlist_media_path(item.id), method: :delete, class: 'btn btn-danger' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @watchlist.empty? %>
+    <p>Your watchlist is empty. Go to the <%= link_to 'Movies page', media_index_path %> to add some!</p>
+  <% end %>
+
+</div>

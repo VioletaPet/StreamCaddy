@@ -177,5 +177,4 @@ class TmdbService
     response = http.request(request)
     JSON.parse(response.read_body)
   end
-
 end

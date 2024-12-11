@@ -15,4 +15,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   resources :user_provider, only: [:index, :new, :create]
+  resources :watchlist_media, only: [:index, :show, :create, :destroy]
 end
