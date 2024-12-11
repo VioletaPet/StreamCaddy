@@ -1,0 +1,2 @@
+class MediaActorServices
+end
