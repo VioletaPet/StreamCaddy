@@ -27,6 +27,7 @@ class MediaController < ApplicationController
 
   def create
     media_result = TmdbService.search_tv_movie(params['title'])
+    yield
     media_type = media_result['results'][0]['media_type']
     media_data = TmdbService.fetch_media_details(media_type, params[:id])
     cast_crew_data = TmdbService.fetch_cast_details(media_type, params[:id])
@@ -65,8 +66,9 @@ class MediaController < ApplicationController
 
 
   def search
-    provider_id = params[:search][:provider].drop(1)
-
+    @watch = WatchProvider.all.pluck(:name, :id)
+    yield
+    provider_id = params[:search][:provider]&.drop(1)
     @media = TmdbService.watch_providers(provider_id)
 
   end
