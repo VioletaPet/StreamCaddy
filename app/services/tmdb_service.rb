@@ -22,6 +22,21 @@ class TmdbService
     json_response['results']
   end
 
+  def self.fetch_tv
+    url = URI("https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&with_original_language=en")
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+    request["Authorization"] = "Bearer #{API_KEY}"
+
+    response = http.request(request)
+    json_response = JSON.parse(response.read_body)
+    json_response['results']
+  end
+
   def self.watch_providers(provider)
 
     if provider.count == 1

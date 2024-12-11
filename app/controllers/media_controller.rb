@@ -11,14 +11,12 @@ class MediaController < ApplicationController
     @media_id = params[:id]
     @media_title = params[:title]
 
-
-
     @media = Media.find_by(api_id: @media_id)
 
     if @media
       render 'show'
     else
-      create
+      redirect_to new_media_path(id: params[:id], title: params[:title])
     end
 
   end
@@ -28,10 +26,10 @@ class MediaController < ApplicationController
   end
 
   def create
-    media_result = TmdbService.search_tv_movie(@media_title)
+    media_result = TmdbService.search_tv_movie(params['title'])
     media_type = media_result['results'][0]['media_type']
-    media_data = TmdbService.fetch_media_details(media_type, @media_id)
-    cast_crew_data = TmdbService.fetch_cast_details(media_type, @media_id)
+    media_data = TmdbService.fetch_media_details(media_type, params[:id])
+    cast_crew_data = TmdbService.fetch_cast_details(media_type, params[:id])
     cast_data = cast_crew_data['cast']
     crew_data = cast_crew_data['crew']
     if media_type == 'movie'
@@ -39,11 +37,11 @@ class MediaController < ApplicationController
     else
       creator = crew_data.sort_by { |crew_data| -crew_data['popularity'] }.first
     end
-    watch_providers_data = TmdbService.fetch_media_watch_providers(media_type, @media_id)['results']['GB']
-    photo_data = TmdbService.fetch_media_images(media_type, @media_id)
+    watch_providers_data = TmdbService.fetch_media_watch_providers(media_type, params[:id])['results']['GB']
+    photo_data = TmdbService.fetch_media_images(media_type, params[:id])
     poster_data = photo_data['posters'][0]
     backdrops_data = photo_data['backdrops'].first(10)
-    video_data = TmdbService.fetch_media_videos(media_type, @media_id)['results']
+    video_data = TmdbService.fetch_media_videos(media_type, params[:id])['results']
     filtered_videos = video_data.select do |video|
       video['type'] == 'Trailer' && video['official'] && video['site'] == 'YouTube'
     end
@@ -56,7 +54,13 @@ class MediaController < ApplicationController
     else
       video_data.first
     end
-    media = MediaService.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data)
+
+    @media = MediaService.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data)
+    if @media
+      redirect_to medium_path(@media)
+    else
+      redirect_to root_path, alert: "Failed to create media."
+    end
   end
 
 
@@ -64,7 +68,7 @@ class MediaController < ApplicationController
     provider_id = params[:search][:provider]
     provider_id.delete_at(0)
 
-    @movies = TmdbService.watch_providers(provider_id)
+    @media = TmdbService.watch_providers(provider_id)
 
   end
 

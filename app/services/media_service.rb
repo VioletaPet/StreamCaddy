@@ -5,12 +5,13 @@ class MediaService
     ActiveRecord::Base.transaction do
 
       media = Media.find_or_create_by(api_id: media_data['id']) do |m|
-        m.title = media_data['title']
+        m.title = media_data['title'] || m.title = media_data['name']
         m.category = media_type
         m.synopsis = media_data['overview']
         m.creator = creator['name']
-        m.release_date = media_data['release_date']
+        m.release_date = media_data['release_date'] || m.release_date = media_data['first_air_date']
         m.run_time = media_data['runtime']
+
         if poster_data
           poster_url = "https://image.tmdb.org/t/p/original#{poster_data['file_path']}"
           m.poster.attach(io: URI.open(poster_url), filename: File.basename(poster_url), content_type: 'image/jpeg')
@@ -23,7 +24,7 @@ class MediaService
         end
       end
 
-      # attach_video_to_media(media, video_data)
+
 
       create_cast_associations(media, cast_data)
       create_genre_associations(media, media_data['genres'])
@@ -93,9 +94,6 @@ class MediaService
       media_watch_provider.buy ||= (type == 'buy')
       media_watch_provider.rent ||= (type == 'rent')
 
-
-      media_watch_provider.save!
     end
   end
-
 end
