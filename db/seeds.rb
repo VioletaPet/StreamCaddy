@@ -6,9 +6,14 @@
 #
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
+UserProvider.destroy_all
+MediaGenre.destroy_all
+WatchlistMedium.destroy_all
 User.destroy_all
 Genre.destroy_all
 WatchProvider.destroy_all
+Media.destroy_all
+
 
 #   end
 7.times do
@@ -167,3 +172,5 @@ streaming_providers = [
 streaming_providers.each do |provider|
   WatchProvider.create(provider)
 end
+
+puts "Created #{WatchProvider.count} watch providers, #{Genre.count} genres, and #{User.count} users"

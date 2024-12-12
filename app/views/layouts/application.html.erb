@@ -8,10 +8,13 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <link href="path/to/select2.min.css" rel="stylesheet" />
+    <script src="path/to/select2.min.js"></script>
+
   </head>
 
   <body><%= render "shared/navbar" %>
-<%= render "shared/flashes" %>
+  <%= render "shared/flashes" %>
 
     <%= yield %>
   </body>

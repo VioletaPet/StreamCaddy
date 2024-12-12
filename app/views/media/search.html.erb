@@ -1,6 +1,18 @@
+<h1>Selected Providers</h1>
+<ul>
+  <% @chosen_providers.each do |provider| %>
+    <li><%= provider.name %></li>
+  <% end %>
+</ul>
 <h1>Movies</h1>
 <% @movies.each do |movie| %>
   <ul>
-    <li> <%= movie['title'] %></li>
+    <li> <%= link_to movie['title'], medium_path(id: movie['id'], title: movie['title']) %></li>
+  </ul>
+<% end %>
+<h1>TV Shows</h1>
+<% @tvshows.each do |show| %>
+  <ul>
+    <li> <%= link_to show['name'],  medium_path(id: show['id'], title: show['name'])%></li>
   </ul>
 <% end %>
