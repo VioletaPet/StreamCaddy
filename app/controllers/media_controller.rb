@@ -68,7 +68,4 @@ class MediaController < ApplicationController
     @tvshows = TmdbService.watch_providers_tv(provider_id)
 
   end
-
-  private
-
 end
