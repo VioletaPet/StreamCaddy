@@ -1,11 +1,11 @@
 <div class="user-providers-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center">
   <h1>Your Streaming Platforms</h1>
   <div class="providers d-flex mb-3">
-    <% @user_providers.each do |provider| %>
+    <% @user_providers.each do |user_provider| %>
       <div class="provider-card bg-white" style="display: flex; justify-content: center; align-items: center; margin-right: 15px; padding: 20px; height: 50px; witdh: 150px">
         <span>
-          <%= provider.name %>
-          <%= link_to "x", user_provider_path(provider.id), data: {turbo_method: :delete}, class: "btn btn-outline-danger btn-sm", style: "border-radius: 50%" %>
+          <%= user_provider.watch_provider.name %>
+          <%= link_to "x", user_provider_path(user_provider), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-outline-danger btn-sm", style: "border-radius: 50%" %>
         </span>
       </div>
     <% end %>

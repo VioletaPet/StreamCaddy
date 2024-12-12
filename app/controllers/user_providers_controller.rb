@@ -1,6 +1,7 @@
 class UserProvidersController < ApplicationController
   def index
-    @user_providers = current_user.watch_providers
+    # @user_providers = current_user.watch_providers
+    @user_providers = current_user.user_providers
   end
 
   def select
@@ -24,8 +25,9 @@ class UserProvidersController < ApplicationController
   end
 
   def destroy
+    # yield
     @provider = current_user.user_providers.find(params[:id])
-    yield
     @provider.destroy
+    redirect_to user_providers_path
   end
 end

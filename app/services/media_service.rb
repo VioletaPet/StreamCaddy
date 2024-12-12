@@ -62,7 +62,9 @@ class MediaService
   def self.create_genre_associations(media, genre_data)
     genre_data.each do |genre|
       genre_record = Genre.find_by(name: genre['name'])
-      MediaGenre.create!(media_id: media['id'], genre_id: genre_record['id'])
+      unless media.genres.exists?(id: genre_record.id)
+        MediaGenre.create!(media_id: media['id'], genre_id: genre_record['id'])
+      end
     end
   end
 

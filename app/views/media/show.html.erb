@@ -64,3 +64,72 @@
         </div>
     </div>
 </div>
+
+
+<%# VIOLETAS ADJUSTMENT %>
+
+
+<div class="container mt-5">
+  <div class="col-md-6">
+    <% if @media.poster %>
+      <img src="<%= url_for(@media.poster) %>" alt="<%= @media.title %> Poster" class="img-fluid rounded">
+    <% else %>
+      <p>No poster available</p>
+    <% end %>
+    <h1><%= @media.title %></h1>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <ul class="nav nav-tabs" id="media-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="synopsis-tab" data-bs-toggle="tab" data-bs-target="#synopsis" type="button" role="tab" aria-controls="synopsis" aria-selected="true">
+        Synopsis
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="cast-tab" data-bs-toggle="tab" data-bs-target="#cast" type="button" role="tab" aria-controls="cast" aria-selected="false">
+        Cast
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="more-tab" data-bs-toggle="tab" data-bs-target="#more" type="button" role="tab" aria-controls="more" aria-selected="false">
+        More
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content mt-3" id="media-tabs-content">
+    <!-- Synopsis Tab -->
+    <div class="tab-pane fade show active" id="synopsis" role="tabpanel" aria-labelledby="synopsis-tab">
+      <% if @media.genres.present? %>
+        <% @media.genres.each do |genre| %>
+          <span style="display: inline-block">
+            <p>  <em><%= genre[:name] %></em>  </p>
+          </span>
+        <% end %>
+      <% end %>
+
+
+      <% if @media.synopsis.present? %>
+        <p><%= @media.synopsis %></p>
+      <% end %>
+      <% if @media.release_date.present? %>
+        <p><strong>Release Date:</strong> <%= @media.release_date.day.ordinalize %> <%= @media.release_date.strftime("%B %Y") %></p>
+      <% end %>
+      <% if @media.run_time.present? %>
+        <p><strong>Runtime:</strong> <%= @media.run_time %>min</p>
+      <% end %>
+    </div>
+
+    <!-- Cast Tab -->
+    <div class="tab-pane fade" id="cast" role="tabpanel" aria-labelledby="cast-tab">
+      <p>Cast information goes here.</p>
+    </div>
+
+    <!-- More Tab -->
+    <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">
+      <p>More information goes here.</p>
+    </div>
+  </div>
+</div>
