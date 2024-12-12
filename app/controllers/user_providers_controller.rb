@@ -7,10 +7,6 @@ class UserProvidersController < ApplicationController
     @available_providers = WatchProvider.where.not(id: current_user.user_providers.select(:watch_provider_id))
   end
 
-  def new
-    # not required since providers are already in database
-  end
-
   def create
     @selected_provider_ids = params[:user_provider_selection][:watch_provider_ids]
     @selected_provider_ids.shift
@@ -29,6 +25,7 @@ class UserProvidersController < ApplicationController
 
   def destroy
     @provider = current_user.user_providers.find(params[:id])
+    yield
     @provider.destroy
   end
 end
