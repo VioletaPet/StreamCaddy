@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: "pages#home"
+  root to: "media#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :media, only: [:index, :new, :show]
     get '/media/new/:id', to: 'media#create', as: :new_media

@@ -67,7 +67,4 @@ class MediaController < ApplicationController
     @media = TmdbService.watch_providers(provider_id)
 
   end
-
-  private
-
 end
