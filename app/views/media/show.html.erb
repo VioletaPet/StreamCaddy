@@ -1,74 +1,4 @@
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-4">
-            <% if @media.poster %>
-                <img src="<%= url_for(@media.poster) %>" alt="<%= @media.title %> Poster" class="img-fluid rounded">
-            <% else %>
-                <p>No poster available</p>
-            <% end %>
-        </div>
-        <div class="col-md-8">
-            <h1><%= @media.title %></h1>
-            <% if @media.release_date.present? %>
-              <p><strong>Release Date:</strong> <%= @media.release_date %></p>
-            <% end %>
-            <% if @media.run_time.present? %>
-              <p><strong>Runtime:</strong> <%= @media.run_time %> minutes</p>
-            <% end %>
-            <p><strong>Synopsis:</strong></p>
-            <p><%= @media.synopsis %></p>
-            <p><strong>Creator:</strong> <%= @media.creator %></p>
-            <h5>Genres</h5>
-            <ul>
-                <% @media.genres.each do |genre| %>
-                    <li><%= genre[:name] %></li>
-                <% end %>
-            </ul>
-            <h5>Cast</h5>
-            <ul>
-                <% @media.media_actors.each do |member| %>
-                    <li><%= member.actor[:name] %> as <%= member[:character] %> <%= link_to 'bio', actor_show_path(member.actor_id) %></li>
-                <% end %>
-
-            </ul>
-            <h5>Watch Providers</h5>
-            <ul>
-                <% @media.media_watch_providers.each do |media_watch_provider| %>
-                    <li>
-                        <%= media_watch_provider.watch_provider.name %>
-                        (Flatrate: <%= media_watch_provider.flatrate %>, Buy: <%= media_watch_provider.buy %>, Rent: <%= media_watch_provider.rent %>)
-                    </li>
-                <% end %>
-            </ul>
-        </div>
-
-        <div class="row mt-4">
-        <% if current_user.watchlist_media.exists?(media_id: @media.id) %>
-        <button class="btn btn-secondary" disabled>Already in Watchlist</button>
-        <% else %>
-        <%= button_to 'Add to watchlist', watchlist_media_path(media_id: @media.id), method: :post, class: 'btn btn-primary' %>
-        <% end %>
-        </div>
-        <div>
-        <button class="mt-3"><%= link_to 'View my watchlist', watchlist_media_path%>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <h5>Backdrops</h5>
-        <div class="d-flex flex-wrap">
-            <% @media.backdrops.each do |backdrop| %>
-                <div class="p-2">
-                    <img src="<%= url_for(backdrop) %>" alt="Backdrop" class="img-fluid rounded">
-                </div>
-            <% end %>
-        </div>
-    </div>
-</div>
-
-
 <%# VIOLETAS ADJUSTMENT %>
-
-
 <div class="container mt-5">
   <div class="col-md-6">
     <% if @media.poster %>
@@ -105,31 +35,65 @@
       <% if @media.genres.present? %>
         <% @media.genres.each do |genre| %>
           <span style="display: inline-block">
-            <p>  <em><%= genre[:name] %></em>  </p>
+            <p><em><%= genre[:name] %></em></p>
           </span>
         <% end %>
       <% end %>
-
-
       <% if @media.synopsis.present? %>
         <p><%= @media.synopsis %></p>
       <% end %>
-      <% if @media.release_date.present? %>
-        <p><strong>Release Date:</strong> <%= @media.release_date.day.ordinalize %> <%= @media.release_date.strftime("%B %Y") %></p>
-      <% end %>
       <% if @media.run_time.present? %>
         <p><strong>Runtime:</strong> <%= @media.run_time %>min</p>
+      <% end %>
+      <% if @media.release_date.present? %>
+        <p> Release Date: <%= @media.release_date.day.ordinalize %> <%= @media.release_date.strftime("%B %Y") %></p>
+      <% end %>
+      <% if @media.creator.present? %>
+        <p>Creator: <%= @media.creator %></p>
       <% end %>
     </div>
 
     <!-- Cast Tab -->
     <div class="tab-pane fade" id="cast" role="tabpanel" aria-labelledby="cast-tab">
-      <p>Cast information goes here.</p>
+      <div class="cast-container">
+        <div class="cast-row">
+          <% @media.actors.each do |actor| %>
+            <div class="col-6">
+              <% if actor.photos.attached? %>
+                <%= cl_image_tag actor.photos.first.key, alt: "#{actor.name} Poster", class: "img-fluid rounded", style: "height: 100px; width: 50px" %>
+              <% else %>
+                <p>No image available</p>
+              <% end %>
+              <%= actor.name %>
+              <%= link_to 'bio', actor_show_path(actor.id) %>
+           </div>
+          <% end %>
+        </div>
+      </div>
     </div>
 
     <!-- More Tab -->
+    <% if @media.seasons.present? %>
+      <p>Seasons: <%= @media.seasons.length %></p>
+    <% end %>
     <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">
-      <p>More information goes here.</p>
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="height: 80%; width: 100%">
+        <div class="carousel-inner">
+          <% @media.backdrops.each_with_index do |backdrop, index| %>
+            <div class="carousel-item <%= 'active' if index == 0 %>">
+              <%= cl_image_tag backdrop.key, class: "img-fluid rounded", alt: "Backdrop" %>
+            </div>
+          <% end %>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

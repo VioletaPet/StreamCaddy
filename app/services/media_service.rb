@@ -1,14 +1,14 @@
 require 'open-uri'
 class MediaService
 
-  def self.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data)
+  def self.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data, media_seasons)
     ActiveRecord::Base.transaction do
 
       media = Media.find_or_create_by(api_id: media_data['id']) do |m|
         m.title = media_data['title'] || m.title = media_data['name']
         m.category = media_type
         m.synopsis = media_data['overview']
-        m.creator = creator['name'] || "N/A'"
+        m.creator = creator['name'] || "N/A"
         m.release_date = media_data['release_date'] || m.release_date = media_data['first_air_date']
         m.run_time = media_data['runtime']
 
@@ -29,6 +29,7 @@ class MediaService
       create_cast_associations(media, cast_data)
       create_genre_associations(media, media_data['genres'])
       create_watch_provider_associations(media, watch_providers_data)
+      create_season_associations(media, media_seasons)
 
       media
     end
@@ -102,5 +103,13 @@ class MediaService
       media_watch_provider.rent ||= (type == 'rent')
 
     end
+  end
+
+  def self.create_season_associations(media, media_seasons)
+    return unless media_seasons
+    Season.create!(
+      media_id: media.id,
+      number: media_seasons['number_of_seasons']
+    )
   end
 end

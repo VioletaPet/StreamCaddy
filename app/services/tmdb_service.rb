@@ -189,4 +189,18 @@ class TmdbService
     response = http.request(request)
     JSON.parse(response.read_body)
   end
+
+  def self.fetch_tv_show_seasons(media_id)
+    url = URI("https://api.themoviedb.org/3/tv/#{media_id}?language=en-US")
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+    request["Authorization"] = "Bearer #{API_KEY}"
+
+    response = http.request(request)
+    JSON.parse(response.read_body)
+  end
 end
