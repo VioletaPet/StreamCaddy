@@ -1,0 +1,11 @@
+<div id="tinder-game">
+  <h1>Swipe to Discover Movies & TV Shows</h1>
+
+  <div id="movie-card">
+    <img src="https://image.tmdb.org/t/p/w500<%= @random_media['poster_path'] %>"
+       alt="<%= @random_media['title'] || @random_media['name'] %> Poster"
+       class="img-fluid rounded">
+    <h2><%= @random_media['title'] || @random_media['name'] %></h2>
+  </div>
+
+</div>

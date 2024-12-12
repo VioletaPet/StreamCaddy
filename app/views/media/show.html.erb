@@ -20,7 +20,7 @@
             <p><strong>Creator:</strong> <%= @media.creator %></p>
             <h5>Genres</h5>
             <ul>
-                <% @media.genres.each do |genre| %>
+                <% @media.genres.distinct.each do |genre| %>
                     <li><%= genre[:name] %></li>
                 <% end %>
             </ul>

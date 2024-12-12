@@ -15,4 +15,6 @@ Rails.application.routes.draw do
   resources :watchlist_media, only: [:index, :show, :create, :destroy]
   resources :user_providers, only: [:index, :new, :create, :destroy]
   get "user_providers/select", to: "user_providers#select"
+  get "game", to: "games#index", as: :game
+  post "game/like", to: "games#like", as: :game_like
 end
