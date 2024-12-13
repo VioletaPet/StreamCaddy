@@ -1,13 +1,15 @@
-<h1>Movies</h1>
+<h1>Entertainment</h1>
 <%= simple_form_for :search, url: media_search_path, method: :get, input_html: { class: 'd-flex align-items-center' } do |f| %>
   <%= f.input :provider, as: :select, collection: @watch_providers, input_html: { multiple: true, class: 'form-control' }, prompt: "Select a provider" %>
   <button type="submit">button</button>
 <% end %>
+<h2>Movies</h2>
 <% @movies.each do |movie| %>
   <ul>
     <li> <%= link_to movie['title'], medium_path(id: movie['id'], title: movie['title']) %></li>
   </ul>
 <% end %>
+<h2>TV-Shows</h2>
 <% @tvshows.each do |show| %>
   <ul>
     <li> <%= link_to show['name'],  medium_path(id: show['id'], title: show['name'])%></li>

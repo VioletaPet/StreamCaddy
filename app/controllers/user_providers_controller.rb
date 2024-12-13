@@ -1,14 +1,11 @@
 class UserProvidersController < ApplicationController
   def index
-    @user_providers = current_user.watch_providers
+    # @user_providers = current_user.watch_providers
+    @user_providers = current_user.user_providers
   end
 
   def select
     @available_providers = WatchProvider.where.not(id: current_user.user_providers.select(:watch_provider_id))
-  end
-
-  def new
-    # not required since providers are already in database
   end
 
   def create
@@ -28,7 +25,9 @@ class UserProvidersController < ApplicationController
   end
 
   def destroy
+    # yield
     @provider = current_user.user_providers.find(params[:id])
     @provider.destroy
+    redirect_to user_providers_path
   end
 end
