@@ -14,6 +14,7 @@ class GamesController < ApplicationController
     @random_media = filtered.sample
   end
 
+  
   def like
     # to create a new media object from the params
     media_result = TmdbService.search_tv_movie(params['title'] || params['name'])
