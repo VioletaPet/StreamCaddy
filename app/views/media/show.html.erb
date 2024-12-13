@@ -73,10 +73,10 @@
     </div>
 
     <!-- More Tab -->
-    <% if @media.seasons.present? %>
-      <p>Seasons: <%= @media.seasons.length %></p>
-    <% end %>
     <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">
+      <% if @media.seasons.present? %>
+        <p>Seasons: <%= @media.seasons.length %></p>
+      <% end %>
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="height: 80%; width: 100%">
         <div class="carousel-inner">
           <% @media.backdrops.each_with_index do |backdrop, index| %>

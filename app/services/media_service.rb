@@ -1,7 +1,7 @@
 require 'open-uri'
 class MediaService
 
-  def self.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data, media_seasons)
+  def self.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data, seasons)
     ActiveRecord::Base.transaction do
 
       media = Media.find_or_create_by(api_id: media_data['id']) do |m|
@@ -29,7 +29,7 @@ class MediaService
       create_cast_associations(media, cast_data)
       create_genre_associations(media, media_data['genres'])
       create_watch_provider_associations(media, watch_providers_data)
-      create_season_associations(media, media_seasons)
+      create_season_associations(media, seasons)
 
       media
     end
@@ -105,13 +105,19 @@ class MediaService
     end
   end
 
-  def self.create_season_associations(media, media_seasons)
-    return unless media_seasons
-    media_seasons.each do |season_data|
-      Season.find_or_create_by!(
+  def self.create_season_associations(media, seasons)
+    return unless seasons
+    seasons.each do |s|
+      season = Season.create!(
         media_id: media.id,
-        number: season_data['number_of_seasons'].to_i  # Use 'season_number' instead of 'number_of_seasons'
+        number: s['season_number'],
+        no_of_episodes: s['episode_count'],
+        synopsis: s['overview']
       )
+      if s['poster_path']
+        poster_url = "https://image.tmdb.org/t/p/original#{s['poster_path']}"
+        season.poster.attach(io: URI.open(poster_url), filename: File.basename(poster_url), content_type: 'image/jpeg')
+      end
     end
   end
 end
