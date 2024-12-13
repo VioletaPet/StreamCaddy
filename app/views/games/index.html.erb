@@ -9,3 +9,6 @@
   </div>
 
 </div>
+<%= link_to "Dislike", game_dislike_path(params: @random_media), data: {"turbo-method": :post} %>
+<%= link_to "Skip", game_skip_path(params: @random_media), data: {"turbo-method": :post} %>
+<%= link_to "Like", game_like_path(params: @random_media), data: {"turbo-method": :post} %>

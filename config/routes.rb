@@ -18,4 +18,6 @@ Rails.application.routes.draw do
   get "user_providers/select", to: "user_providers#select"
   get "game", to: "games#index", as: :game
   post "game/like", to: "games#like", as: :game_like
+  post "game/dislike", to: "games#dislike", as: :game_dislike
+  post "game/skip", to: "games#skip", as: :game_skip
 end
