@@ -189,4 +189,22 @@ class TmdbService
     response = http.request(request)
     JSON.parse(response.read_body)
   end
+
+  def self.fetch_random_media(media_type, providers)
+
+    random_page = rand(1..100)
+    url = URI("https://api.themoviedb.org/3/discover/#{media_type}?language=en-US&sort_by=popularity.desc&page=#{random_page}&watch_region=GB")
+
+    url.query += "&with_watch_providers=#{providers.join("|")}" if providers.any?
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+    request["Authorization"] = "Bearer #{API_KEY}"
+
+    response = http.request(request)
+    JSON.parse(response.body)['results']
+  end
 end
