@@ -12,7 +12,7 @@ class MediaController < ApplicationController
     @media_id = params[:id]
     @media_title = params[:title]
 
-    @media = Media.find_by(api_id: @media_id)
+    @media = Media.includes(:actors, :seasons).find_by(api_id: @media_id)
     if @media
       render 'show'
     else
@@ -28,6 +28,9 @@ class MediaController < ApplicationController
     media_result = TmdbService.search_tv_movie(params['title'])
     media_type = media_result['results'][0]['media_type']
     media_data = TmdbService.fetch_media_details(media_type, params[:id])
+    # SEASONS
+    media_seasons = TmdbService.fetch_tv_show_seasons(params[:id])
+    seasons = media_seasons['seasons']
     cast_crew_data = TmdbService.fetch_cast_details(media_type, params[:id])
     cast_data = cast_crew_data['cast']
     crew_data = cast_crew_data['crew']
@@ -54,7 +57,7 @@ class MediaController < ApplicationController
       video_data.first
     end
 
-    @media = MediaService.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data)
+    @media = MediaService.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data, seasons)
 
     render 'show'
   end
