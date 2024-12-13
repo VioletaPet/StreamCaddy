@@ -1,31 +1,22 @@
-require_dependency '../services/tmdb_service.rb'
-
-class MediaController < ApplicationController
+class GamesController < ApplicationController
   def index
-    @watch_providers = WatchProvider.all.pluck(:name, :api_id)
-    @movies = TmdbService.fetch_movies
-    @tvshows = TmdbService.fetch_tv
-  end
+    @user_providers = current_user.watch_providers.pluck(:api_id)
+    watchlist_ids = current_user.watchlist_media.pluck(:media_id)
+    disliked_ids = session[:disliked_media_ids] || []
 
-  def show
+    media_type = ['movie', 'tv'].sample
 
-    @media_id = params[:id]
-    @media_title = params[:title]
+    media_results = TmdbService.fetch_random_media(media_type, @user_providers)
 
-    @media = Media.find_by(api_id: @media_id)
-    if @media
-      render 'show'
-    else
-      redirect_to new_media_path(id: params[:id], title: params[:title])
+    filtered = media_results.reject do |media|
+      watchlist_ids.include?(media['id'] || disliked_ids.include?(media['id']))
     end
+    @random_media = filtered.sample
   end
 
-  def new
-    @media = Media.new
-  end
-
-  def create
-    media_result = TmdbService.search_tv_movie(params['title'])
+  def like
+    # to create a new media object from the params
+    media_result = TmdbService.search_tv_movie(params['title'] || params['name'])
     media_type = media_result['results'][0]['media_type']
     media_data = TmdbService.fetch_media_details(media_type, params[:id])
     cast_crew_data = TmdbService.fetch_cast_details(media_type, params[:id])
@@ -56,16 +47,23 @@ class MediaController < ApplicationController
 
     @media = MediaService.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data)
 
-    render 'show'
+    # to create a new watchlist_media object with the media object
+
+    @watchlist_media = current_user.watchlist_media.new(media: @media)
+    if @watchlist_media.save
+      redirect_to game_path, notice: "Item has been added to your watchlist"
+    else
+      redirect_to games_path, alert: 'Failed to add item to your Watchlist'
+    end
   end
 
+  def dislike
+    session[:disliked_media_ids] ||= []
+    session[:disliked_media_ids] << params[:id].to_i unless session[:disliked_media_ids].include?(params[:id].to_i)
+    redirect_to game_path
+  end
 
-  def search
-    provider_id = params[:search][:provider]&.reject(&:blank?)
-    @chosen_providers = WatchProvider.where(api_id: provider_id)
-
-    @movies = TmdbService.watch_providers_movies(provider_id)
-    @tvshows = TmdbService.watch_providers_tv(provider_id)
-
+  def skip
+    redirect_to game_path
   end
 end
