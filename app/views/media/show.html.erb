@@ -2,7 +2,7 @@
 <div class="container mt-5">
   <div class="col-md-6">
     <% if @media.poster %>
-      <img src="<%= url_for(@media.poster) %>" alt="<%= @media.title %> Poster" class="img-fluid rounded">
+      <%= cl_image_tag(@media.poster.key, alt: "#{@media.title} Poster", class: "img-fluid rounded") %>
     <% else %>
       <p>No poster available</p>
     <% end %>
