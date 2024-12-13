@@ -107,9 +107,11 @@ class MediaService
 
   def self.create_season_associations(media, media_seasons)
     return unless media_seasons
-    Season.create!(
-      media_id: media.id,
-      number: media_seasons['number_of_seasons']
-    )
+    media_seasons.each do |season_data|
+      Season.find_or_create_by!(
+        media_id: media.id,
+        number: season_data['number_of_seasons'].to_i  # Use 'season_number' instead of 'number_of_seasons'
+      )
+    end
   end
 end
