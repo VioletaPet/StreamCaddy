@@ -1,14 +1,14 @@
 require 'open-uri'
 class MediaService
 
-  def self.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data)
+  def self.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data, seasons)
     ActiveRecord::Base.transaction do
 
       media = Media.find_or_create_by(api_id: media_data['id']) do |m|
         m.title = media_data['title'] || m.title = media_data['name']
         m.category = media_type
         m.synopsis = media_data['overview']
-        m.creator = creator['name'] || "N/A'"
+        m.creator = creator['name'] || "N/A"
         m.release_date = media_data['release_date'] || m.release_date = media_data['first_air_date']
         m.run_time = media_data['runtime']
 
@@ -29,6 +29,7 @@ class MediaService
       create_cast_associations(media, cast_data)
       create_genre_associations(media, media_data['genres'])
       create_watch_provider_associations(media, watch_providers_data)
+      create_season_associations(media, seasons)
 
       media
     end
@@ -62,7 +63,9 @@ class MediaService
   def self.create_genre_associations(media, genre_data)
     genre_data.each do |genre|
       genre_record = Genre.find_by(name: genre['name'])
-      MediaGenre.create!(media_id: media['id'], genre_id: genre_record['id'])
+      unless media.genres.exists?(id: genre_record.id)
+        MediaGenre.create!(media_id: media['id'], genre_id: genre_record['id'])
+      end
     end
   end
 
@@ -99,6 +102,22 @@ class MediaService
       media_watch_provider.buy ||= (type == 'buy')
       media_watch_provider.rent ||= (type == 'rent')
 
+    end
+  end
+
+  def self.create_season_associations(media, seasons)
+    return unless seasons
+    seasons.each do |s|
+      season = Season.create!(
+        media_id: media.id,
+        number: s['season_number'],
+        no_of_episodes: s['episode_count'],
+        synopsis: s['overview']
+      )
+      if s['poster_path']
+        poster_url = "https://image.tmdb.org/t/p/original#{s['poster_path']}"
+        season.poster.attach(io: URI.open(poster_url), filename: File.basename(poster_url), content_type: 'image/jpeg')
+      end
     end
   end
 end
