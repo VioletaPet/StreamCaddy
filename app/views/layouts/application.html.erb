@@ -14,7 +14,9 @@
   </head>
 
   <body>
-  <% unless controller.controller_name == 'pages' && controller.action_name == 'home' %>
+  <% if controller.controller_name == 'media' && controller.action_name == 'index' %>
+  <%= render "shared/main_navbar" %>
+  <% else %>
   <%= render "shared/navbar" %>
   <% end %>
   <%= render "shared/flashes" %>

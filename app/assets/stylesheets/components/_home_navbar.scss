@@ -1,14 +1,14 @@
-.navbar {
+.main-navbar {
   justify-content: space-between;
-  background-image: url("navbar.jpeg");
+  background-color: black;
   background-size: auto;
 }
 
-.navbar .navbar-collapse {
+.main-navbar .navbar-collapse {
   flex-grow: 0;
 }
 
-.navbar .navbar-brand img {
+.main-navbar .navbar-brand img {
   width: 60px;
   border-radius: 50%;
 }

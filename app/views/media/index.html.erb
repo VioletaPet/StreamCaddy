@@ -1,8 +1,21 @@
-<h1>Movies</h1>
+<div class="banner">
+<div class="banner-content">
+<h1>Welcome to StreamCaddy</h1>
+<p>Your personalized streaming assistant!</p>
+<%= link_to 'Browse Movies/TvShows', media_path, class: 'btn btn-dark' %>
+</div>
+</div>
+
+<div class="container">
+<div class="search">
 <%= simple_form_for :search, url: media_search_path, method: :get, input_html: { class: 'd-flex align-items-center' } do |f| %>
   <%= f.input :provider, as: :select, collection: @watch_providers, input_html: { multiple: true, class: 'form-control' }, prompt: "Select a provider" %>
-  <button type="submit">button</button>
+  <button type="submit" class="btn btn-primary">button</button>
 <% end %>
+</div>
+
+<div class="media">
+<h1>Movies</h1>
 <% @movies.each do |movie| %>
   <ul>
     <li> <%= link_to movie['title'], medium_path(id: movie['id'], title: movie['title']) %></li>
@@ -13,3 +26,7 @@
     <li> <%= link_to show['name'],  medium_path(id: show['id'], title: show['name'])%></li>
   </ul>
 <% end %>
+
+</div>
+
+</div>
