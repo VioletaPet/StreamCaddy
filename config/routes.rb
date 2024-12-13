@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: "pages#home"
+  root to: "user_providers#index"
   get '/show', to: "users#show", as: 'show'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "media/search", to: "media#search", as: 'media_search'

@@ -1,15 +1,20 @@
-.main-navbar {
-  justify-content: space-between;
+.nav {
   background-color: black;
-  background-size: auto;
 }
 
-.main-navbar .navbar-collapse {
-  flex-grow: 0;
-}
-
-.main-navbar .navbar-brand img {
+.nav .navbar-brand img {
   width: 60px;
+  border-radius: 50%;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.avatar-img {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 }
 
@@ -18,4 +23,5 @@
   font-size: 16px;
   font-weight: 300;
   margin-right: 5px;
+  text-transform: capitalize;
 }
