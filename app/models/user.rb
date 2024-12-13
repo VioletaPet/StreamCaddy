@@ -13,4 +13,11 @@ class User < ApplicationRecord
   has_many :episodes, through: :seasons
   validates :first_name, :last_name, presence: true
   validates :email, :username, uniqueness: true
+
+  def calculate_genre_percentages(user_genres)
+    genre_count = user_genres.each_with_object(Hash.new(0)) do |genre, count|
+      counts[genre.name] += 1
+    end
+    
+  end
 end
