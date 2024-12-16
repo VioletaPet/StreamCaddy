@@ -46,7 +46,7 @@ class WatchlistMediaController < ApplicationController
     @provider_content.each do |provider, content|
       content[:free] = content[:free].sort_by { |item| -item[:score] }
       content[:paid] = content[:paid].sort_by { |item| -item[:score] }
-    
+
     end
     @unreleased_content = @unreleased_content.sort_by { |item| -item[:score] }
 
@@ -67,7 +67,17 @@ class WatchlistMediaController < ApplicationController
     end
   end
 
-
+  def schedule
+    platform_count = params[:platform_count].to_i
+    if platform_count > 0
+      user_providers = current_user.watch_providers.pluck(:id)
+      @schedule = current_user.suggest_content_schedule(platform_count, user_providers)
+    else
+      @schedule = []
+      flash[:alert] = "Please select a valid number of platforms."
+    end
+    render :schedule
+  end
 
 
 

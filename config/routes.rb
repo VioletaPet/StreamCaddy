@@ -17,7 +17,11 @@ Rails.application.routes.draw do
   get "actor/show", to: "actor#show", as: :actor_show
   # Defines the root path route ("/")
   # root "posts#index"
-  resources :watchlist_media, only: [:index, :show, :create, :destroy]
+  resources :watchlist_media, only: [:index, :show, :create, :destroy] do
+    collection do
+      get :schedule
+    end
+  end
 
   # User provider routes
   resources :user_providers, only: [:index, :create, :destroy]
@@ -29,4 +33,4 @@ Rails.application.routes.draw do
   post "game/dislike", to: "games#dislike", as: :game_dislike
   post "game/skip", to: "games#skip", as: :game_skip
   resources :seasons, only: [:show]
-end
+  end

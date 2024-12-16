@@ -1,51 +1,24 @@
-<div class="container mt-5">
-  <h1 class="text-center display-4 mb-4">My Watchlist</h1>
+<h1>Your Global Watchlist</h1>
 
-  <!-- Provider Sections -->
-  <% @provider_content.each do |provider, content| %>
-    <div class="provider-section mb-5">
-      <h2 class="text-primary mb-4"><%= provider.name.capitalize %></h2>
+<% if @watchlist.any? %>
+  <ul>
+    <% @watchlist.each do |item| %>
+      <li>
+        <strong><%= item.media.title %></strong>
+        - Runtime: <%= item.media.media_run_time %> minutes
+        <%= link_to "Remove", watchlist_medium_path(item), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-danger btn-sm" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Your watchlist is empty. Add content to start scheduling!</p>
+<% end %>
 
-      <!-- Free Content -->
-      <% if content[:free].any? %>
-        <h3 class="text-success mb-3">Free Content</h3>
-        <div class="scroll-container d-flex overflow-auto">
-          <% content[:free].each do |item| %>
-            <div class="card content-card">
-              <h5 class="card-title"><%= item[:media].title %></h5>
-              <p>Score: <%= item[:score] %></p>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-
-      <!-- Paid Content -->
-      <% if content[:paid].any? %>
-        <h3 class="text-danger mt-4 mb-3">Paid or Rented Content</h3>
-        <div class="scroll-container d-flex overflow-auto">
-          <% content[:paid].each do |item| %>
-            <div class="card content-card">
-              <h5 class="card-title"><%= item[:media].title %></h5>
-              <p>Score: <%= item[:score] %></p>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
-
-  <!-- Unreleased Content Section -->
-  <% if @unreleased_content.any? %>
-    <div class="unreleased-section mt-5">
-      <h2 class="text-warning mb-4">Unreleased Content</h2>
-      <div class="scroll-container d-flex overflow-auto">
-        <% @unreleased_content.each do |item| %>
-          <div class="card content-card">
-            <h5 class="card-title"><%= item[:media].title %></h5>
-            <p>Score: <%= item[:score] %></p>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
-</div>
+<h2>Generate Your Viewing Schedule</h2>
+<%= form_with url: schedule_watchlist_media_path, method: :get, local: true do |form| %>
+  <div>
+    <%= form.label :platform_count, "How many platforms would you like to subscribe to?" %>
+    <%= form.number_field :platform_count, in: 1..5, step: 1, value: 1 %>
+  </div>
+  <%= form.submit "Generate Schedule", class: "btn btn-primary" %>
+<% end %>

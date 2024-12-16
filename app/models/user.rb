@@ -60,7 +60,7 @@ class User < ApplicationRecord
       genre_rank = genre_weights.keys.index(genre.name)
       genre_rank ? [5 - genre_rank, 0].max : 0
     end
-    raise
+
     creator_rank = creator_weights.keys.index(media_item.creator)
     creator_score = if creator_rank && creator_rank < 5
                       [10, 7.5, 5, 2.5, 1][creator_rank]
@@ -106,21 +106,117 @@ class User < ApplicationRecord
     provider_totals.sort_by { |_provider, total_score| -total_score }.to_h
   end
 
+  def suggest_content_schedule(selected_platforms, user_providers)
+    provider_data = Hash.new { |hash, key| hash[key] = { content: [], total_score: 0, total_runtime: 0 } }
 
+    watchlist_media.includes(media: :watch_providers).each do |watchlist_item|
+      media_item = watchlist_item.media
+      runtime = media_item.media_run_time
 
+      media_item.watch_providers.each do |provider|
+        provider_name = provider.name
+        provider_id = provider.id
+
+        provider_score = score_media_item(media_item, determine_provider_type(media_item))
+        provider_data[provider_id][:content] << {
+          media: media_item,
+          score: provider_score,
+          runtime: runtime,
+          provider_name: provider_name,
+          subscribed: user_providers.include?(provider_id)
+        }
+
+        provider_data[provider_id][:total_score] += provider_score
+        provider_data[provider_id][:total_runtime] += runtime
+      end
+    end
+
+    sorted_providers = provider_data.sort_by { |_provider, data| [-data[:total_score], -data[:total_runtime]] }.to_h
+
+    selected_providers = sorted_providers.keys.first(selected_platforms)
+
+    build_subscription_schedule(selected_providers, provider_data, user_providers)
+  end
 
   def avatar_url
     avatar.attached? ? avatar : 'https://www.hartz.com/wp-content/uploads/2022/04/small-dog-owners-1.jpg'
   end
-end
+
 
 private
 
-def determine_provider_type(media_item)
-  # Check for the provider type in media_watch_providers
-  media_watch_provider = media_item.media_watch_providers.find_by(watch_provider_id: media_item.watch_providers.pluck(:id))
-  return 'free' if media_watch_provider&.flatrate
-  return 'rent' if media_watch_provider&.rent
-  return 'paid' if media_watch_provider&.buy
-  'unknown'
+  def determine_provider_type(media_item)
+
+    media_watch_provider = media_item.media_watch_providers.find_by(watch_provider_id: media_item.watch_providers.pluck(:id))
+    return 'free' if media_watch_provider&.flatrate
+    return 'rent' if media_watch_provider&.rent
+    return 'paid' if media_watch_provider&.buy
+    'unknown'
+  end
+
+  def build_subscription_schedule(selected_providers, provider_data, user_providers)
+    schedule = []
+    monthly_runtime = 7200
+    month = 1
+
+    provider_content = provider_data.map { |provider, data| [provider, data[:content].dup] }.to_h
+
+    scheduled_content_ids = Set.new
+    
+    while provider_content.values.flatten.any?
+      month_content = []
+      remaining_runtime = monthly_runtime
+      suggested_provider = nil
+
+      (selected_providers + provider_content.keys).uniq.each do |provider|
+        next if provider_content[provider].blank?
+
+      content_to_remove = []
+
+      provider_content[provider].each do |item|
+        break if remaining_runtime <= 0
+
+        if item[:runtime] <= remaining_runtime
+          month_content << {
+            media: item[:media],
+            runtime: item[:runtime],
+            score: item[:score],
+            provider: provider,
+            subscribed: user_providers.include?(provider)
+          }
+          remaining_runtime -= item[:runtime]
+          content_to_remove << item
+        else
+          partial_runtime = remaining_runtime
+          remaining_runtime = 0
+
+          month_content << {
+            media: item[:media],
+            runtime: partial_runtime,
+            score: item[:score],
+            provider: item[:provider_name],
+            subscribed: user_providers.include?(provider),
+            continued: true
+          }
+          item[:runtime] -= partial_runtime
+          break
+        end
+      end
+
+      provider_content[provider] -= content_to_remove
+      suggested_provider ||= provider unless user_providers.include?(provider)
+      break if remaining_runtime <= 0
+    end
+
+    if month_content.any?
+      schedule << { month: month, content: month_content, suggested_provider: suggested_provider }
+      month += 1
+    else
+      break
+    end
+  end
+
+  schedule
+end
+
 end

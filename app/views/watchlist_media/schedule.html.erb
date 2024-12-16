@@ -1,0 +1,36 @@
+<h1 class="text-center mt-3">Your Multi-Month Content Schedule</h1>
+
+<% if @schedule.present? %>
+  <% @schedule.each do |entry| %>
+    <div class="month-section mb-4">
+      <h2 class="text-center">Month <%= entry[:month] %></h2>
+
+      <% if entry[:suggested_provider] %>
+        <p class="text-center text-danger">
+          Suggested Subscription: <strong><%= WatchProvider.find(entry[:suggested_provider])[:name] %></strong>
+
+          <span>(To access more high-value content)</span>
+        </p>
+      <% end %>
+
+      <div class="scroll-container">
+        <% entry[:content].each do |item| %>
+          <div class="content-card <%= 'unsubscribed' unless item[:subscribed] %>">
+            <%= cl_image_tag item[:media].poster.key, width: 150, height: 225, crop: :fill, alt: item[:media].title, class: "poster" %>
+            <div class="content-info">
+              <strong><%= item[:media].title %></strong>
+              <p>Provider: <%= item[:provider] %></p>
+              <p>Runtime: <%= item[:runtime] %> minutes</p>
+              <p>Score: <%= item[:score] %></p>
+              <% unless item[:subscribed] %>
+                <span class="text-warning">Not Subscribed</span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <p class="text-center">No schedule could be generated. Add items to your watchlist!</p>
+<% end %>
