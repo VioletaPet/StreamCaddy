@@ -1,14 +1,14 @@
-.navbar-lewagon {
+.navbar {
   justify-content: space-between;
   background-image: url("navbar.jpeg");
   background-size: auto;
 }
 
-.navbar-lewagon .navbar-collapse {
+.navbar .navbar-collapse {
   flex-grow: 0;
 }
 
-.navbar-lewagon .navbar-brand img {
+.navbar .navbar-brand img {
   width: 60px;
   border-radius: 50%;
 }
