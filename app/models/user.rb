@@ -18,19 +18,20 @@ class User < ApplicationRecord
   has_many :user_creator_weights
 
   def recalculate_weights
-    genre_counts = watchlist_media.flat_map { |m| m.media.genres.map(&:name) }.tally
+    genre_counts = watchlist_media.flat_map { |m| m.media.genres.pluck(:name) }.tally
     total_genres = genre_counts.values.sum
 
-    @genre_weights = genre_counts.transform_values do |count|
-      ((count.to_f / total_genres) * 100).round(2)
-    end
+    @genre_weights = genre_counts.transform_values { |count| ((count.to_f / total_genres) * 100).round(2) }
+                               .sort_by { |_genre, percentage| -percentage }
+                               .to_h
 
-    creator_counts = watchlist_media.map { |m| m.media.creator }.compact_blank.tally
+
+    creator_counts = watchlist_media.map { |m| m.media.creator.presence }.compact.tally
     total_creators = creator_counts.values.sum
 
-    @creator_weights = creator_counts.transform_values do |count|
-      ((count.to_f / total_creators) * 100).round(2)
-    end
+    @creator_weights = creator_counts.transform_values { |count| ((count.to_f / total_creators) * 100).round(2) }
+    .sort_by { |_creator, percentage| -percentage }
+    .to_h
 
   end
 
@@ -50,7 +51,6 @@ class User < ApplicationRecord
       provider_type = determine_provider_type(media_item)
 
       new_score = score_media_item(media_item, provider_type)
-      media_item.update(score: new_score) if media_item.respond_to?(:score)
     end
   end
 
@@ -60,7 +60,7 @@ class User < ApplicationRecord
       genre_rank = genre_weights.keys.index(genre.name)
       genre_rank ? [5 - genre_rank, 0].max : 0
     end
-
+    raise
     creator_rank = creator_weights.keys.index(media_item.creator)
     creator_score = if creator_rank && creator_rank < 5
                       [10, 7.5, 5, 2.5, 1][creator_rank]
@@ -91,13 +91,12 @@ class User < ApplicationRecord
 
 
   def provider_scores
-
     provider_totals = Hash.new(0)
 
-    watchlist_media.each do |watchlist_item|
+    watchlist_media.includes(:media, media: :watch_providers).each do |watchlist_item|
       media_item = watchlist_item.media
-      media_score = score_media_item(media_item)
-
+      provider_type = determine_provider_type(media_item)
+      media_score = score_media_item(media_item, provider_type)
 
       media_item.watch_providers.each do |provider|
         provider_totals[provider.name] += media_score

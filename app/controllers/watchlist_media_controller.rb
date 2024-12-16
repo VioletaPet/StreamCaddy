@@ -47,7 +47,6 @@ class WatchlistMediaController < ApplicationController
       content[:free] = content[:free].sort_by { |item| -item[:score] }
       content[:paid] = content[:paid].sort_by { |item| -item[:score] }
     
-
     end
     @unreleased_content = @unreleased_content.sort_by { |item| -item[:score] }
 
