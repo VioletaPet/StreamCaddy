@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_one_attached :avatar
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -14,6 +15,13 @@ class User < ApplicationRecord
   validates :first_name, :last_name, presence: true
   validates :email, :username, uniqueness: true
 
-  
+  def calculate_genre_percentages(user_genres)
+    genre_count = user_genres.each_with_object(Hash.new(0)) do |genre, count|
+      counts[genre.name] += 1
+    end
+  end
 
+  def avatar_url
+    avatar.attached? ? avatar : 'https://www.hartz.com/wp-content/uploads/2022/04/small-dog-owners-1.jpg'
+  end
 end

@@ -1,0 +1,18 @@
+<div id="movie-card">
+  <img src="https://image.tmdb.org/t/p/w500<%= random_media['poster_path'] %>"
+       alt="<%= random_media['title'] || random_media['name'] %> Poster"
+       class="img-fluid rounded">
+  <h2><%= random_media['title'] || random_media['name'] %></h2>
+
+  <div class="buttons">
+    <%= link_to "Dislike", game_dislike_path(id: random_media['id']),
+                  data: {"turbo-method": :post},
+                  class: "btn btn-danger" %>
+    <%= link_to "Skip", game_skip_path(id: random_media['id']),
+                  data: {"turbo-method": :post},
+                  class: "btn btn-secondary" %>
+    <%= link_to "Like", game_like_path(id: random_media['id']),
+                  data: {"turbo-method": :post},
+                  class: "btn btn-success" %>
+  </div>
+</div>
