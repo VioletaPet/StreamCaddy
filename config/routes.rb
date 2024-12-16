@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   get "actor/show", to: "actor#show"
   # Defines the root path route ("/")
   # root "posts#index"
-  resources :watchlist_media, only: [:index, :show, :create, :destroy]
+  resources :watchlist_media, only: [:index, :show, :create, :destroy] do
+    resources :reviews, only: [:new, :create]
+  end
   resources :user_providers, only: [:index, :create, :destroy]
   get "user_providers/select", to: "user_providers#select"
   get "game", to: "games#index", as: :game

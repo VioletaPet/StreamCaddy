@@ -1,0 +1,30 @@
+<div class="page-container">
+  <h1 class="m-3 text-center">Write a review</h1>
+
+    <%= simple_form_for [@watchlist_item, @review], html: { class: "form" } do |f| %>
+      <% if @review.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@review.errors.count, "error") %> prohibited this review from being saved:</h2>
+          <ul>
+            <% @review.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="container">
+      <div class="form-group">
+        <%= f.input :content, label: "Your Review", as: :text, placeholder: "Write your review here...", input_html: { rows: 6 } %>
+      </div>
+      <div class="form-group">
+        <%= f.input :rating, label: "Rating (1 to 5)", input_html: { min: 1, max: 5 } %>
+      </div>
+
+      <div class="form-actions text-center">
+        <%= f.button :submit, "Submit", class: "btn btn-primary text-justify-center" %>
+      </div>
+    <% end %>
+      </div>
+
+
+  </div>
