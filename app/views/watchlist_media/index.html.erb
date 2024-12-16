@@ -1,32 +1,51 @@
 <div class="container mt-5">
+  <h1 class="text-center display-4 mb-4">My Watchlist</h1>
 
-  <h1 class="text-center display-4 mb-4">My Fabulous Watchlist</h1>
+  <!-- Provider Sections -->
+  <% @provider_content.each do |provider, content| %>
+    <div class="provider-section mb-5">
+      <h2 class="text-primary mb-4"><%= provider.name.capitalize %></h2>
 
-  <div class="row g-4">
-    <% @watchlist.each do |item| %>
-      <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100">
-          <% if item.media.poster.present? %>
-            <img src="<%= url_for(item.media.poster) %>" class="card-img-top img-fluid rounded-top" alt="<%= item.media.title %> Poster">
-          <% else %>
-            <div class="card-img-top text-center bg-secondary text-white py-5 rounded-top">
-              <p>No Poster Available</p>
+      <!-- Free Content -->
+      <% if content[:free].any? %>
+        <h3 class="text-success mb-3">Free Content</h3>
+        <div class="scroll-container d-flex overflow-auto">
+          <% content[:free].each do |item| %>
+            <div class="card content-card">
+              <h5 class="card-title"><%= item[:media].title %></h5>
+              <p>Score: <%= item[:score] %></p>
             </div>
           <% end %>
-
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title text-truncate text-center">
-              <%= link_to item.media.title, medium_path(item.media.api_id), class: 'text-dark text-decoration-none' %>
-            </h5>
-            <%= link_to 'Remove from Watchlist', watchlist_medium_path(item), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: 'btn btn-danger btn-sm mt-3 text-decoration-none' %>
-          </div>
         </div>
-      </div>
-    <% end %>
-  </div>
+      <% end %>
 
-  <% if @watchlist.empty? %>
-    <p>Your watchlist is empty. Go to the <%= link_to 'Movies page', media_path %> to add some!</p>
+      <!-- Paid Content -->
+      <% if content[:paid].any? %>
+        <h3 class="text-danger mt-4 mb-3">Paid or Rented Content</h3>
+        <div class="scroll-container d-flex overflow-auto">
+          <% content[:paid].each do |item| %>
+            <div class="card content-card">
+              <h5 class="card-title"><%= item[:media].title %></h5>
+              <p>Score: <%= item[:score] %></p>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 
+  <!-- Unreleased Content Section -->
+  <% if @unreleased_content.any? %>
+    <div class="unreleased-section mt-5">
+      <h2 class="text-warning mb-4">Unreleased Content</h2>
+      <div class="scroll-container d-flex overflow-auto">
+        <% @unreleased_content.each do |item| %>
+          <div class="card content-card">
+            <h5 class="card-title"><%= item[:media].title %></h5>
+            <p>Score: <%= item[:score] %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>

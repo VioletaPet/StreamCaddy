@@ -8,7 +8,7 @@ class MediaService
         m.title = media_data['title'] || m.title = media_data['name']
         m.category = media_type
         m.synopsis = media_data['overview']
-        m.creator = creator['name'] || "N/A"
+        m.creator = creator&.[]('name') || "Unknown Creator"
         m.release_date = media_data['release_date'] || m.release_date = media_data['first_air_date']
         m.run_time = media_data['runtime']
 
@@ -102,6 +102,7 @@ class MediaService
       media_watch_provider.buy ||= (type == 'buy')
       media_watch_provider.rent ||= (type == 'rent')
 
+      media_watch_provider.save
     end
   end
 
