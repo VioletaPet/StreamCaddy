@@ -28,7 +28,6 @@ class MediaController < ApplicationController
     media_result = TmdbService.search_tv_movie(params['title'])
     media_type = media_result['results'][0]['media_type']
     media_data = TmdbService.fetch_media_details(media_type, params[:id])
-    # SEASONS
     media_seasons = TmdbService.fetch_tv_show_seasons(params[:id])
     seasons = media_seasons['seasons']
     cast_crew_data = TmdbService.fetch_cast_details(media_type, params[:id])

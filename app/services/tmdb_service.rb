@@ -89,21 +89,6 @@ class TmdbService
     JSON.parse(response.read_body)
   end
 
-  def self.fetch_tv
-    url = URI("https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&with_original_language=en")
-
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-
-    request = Net::HTTP::Get.new(url)
-    request["accept"] = 'application/json'
-    request["Authorization"] = "Bearer #{API_KEY}"
-
-    response = http.request(request)
-    json_response = JSON.parse(response.read_body)
-    json_response['results']
-  end
-
   def self.search_tv_movie(media_title)
     url = URI("https://api.themoviedb.org/3/search/multi?query=#{media_title}&include_adult=false&language=en-US&page=1")
 
@@ -216,6 +201,20 @@ class TmdbService
     request = Net::HTTP::Get.new(url)
     request["accept"] = 'application/json'
     request["Authorization"] = "Bearer #{API_KEY}"
+
+    response = http.request(request)
+    JSON.parse(response.read_body)
+  end
+
+  def self.fetch_season_episodes(media_id, season_number)
+    url = URI("https://api.themoviedb.org/3/tv/#{media_id}/season/#{season_number}?language=en-US")
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+    request["Authorization"] = 'Bearer #{API_KEY}'
 
     response = http.request(request)
     JSON.parse(response.read_body)
