@@ -4,17 +4,17 @@ class ReviewsController < ApplicationController
   end
 
   def new
-    @watchlist_item = WatchlistMedium.find(params[:watchlist_medium_id])
-    @review = @watchlist_item.reviews.build
+    @watchlist_item = Media.find(params[:medium_id])
+    @review = @watchlist_item.reviews.new
   end
 
   def create
-    @watchlist_item = WatchlistMedium.find(params[:watchlist_medium_id])
-    @review = @watchlist_item.reviews.build(review_params)
+    @watchlist_item = Media.find(params[:medium_id])
+    @review = @watchlist_item.reviews.new(review_params)
     @review.user = current_user
 
     if @review.save
-      redirect_to watchlist_media_path, notice: "Review has been added."
+      redirect_to medium_path(@watchlist_item.api_id), notice: "Review successfully added!"
     else
       render :new, alert: "There was an error saving your review."
     end

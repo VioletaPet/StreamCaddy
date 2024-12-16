@@ -18,9 +18,6 @@ class WatchlistMediaController < ApplicationController
     end
   end
 
- 
-
-
   def destroy
     @watchlist_media = current_user.watchlist_media.find(params[:id])
     @watchlist_media.destroy
