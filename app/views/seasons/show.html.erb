@@ -1,0 +1,19 @@
+<div class="container mt-3 mx-3">
+<h2><%= @media.title %></h2>
+<h3><%= @season.name.present? ? @season.name : "Season #{@season.number}" %></h3>
+<%= link_to medium_path(@media.api_id) do %>
+  <i class="fa-solid fa-arrow-left"></i>
+<% end %>
+<p><%= @season.synopsis %></p>
+  <div class="row row-cols-2 g-3">
+    <% @season.episodes.each do |episode| %>
+      <div class="col">
+        <div class="episode-card">
+          <p class="mb-0"><strong><%= episode.number %> <%= episode.name %></strong></p>
+          <p class="mb-0"><%= episode.synopsis %></p>
+          <p><em><%= episode.runtime %>min</em></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
