@@ -1,11 +1,11 @@
-<div class="container mt-3 mx-3">
-<h2><%= @media.title %></h2>
-<h3><%= @season.name.present? ? @season.name : "Season #{@season.number}" %></h3>
+<div class="container mt-3">
 <%= link_to medium_path(@media.api_id) do %>
-  <i class="fa-solid fa-arrow-left"></i>
+  <i class="fa-solid fa-arrow-left mb-3"></i>
 <% end %>
+<h2><%= @media.title %></h2>
+<h3><em><%= @season.name.present? ? @season.name : "Season #{@season.number}" %></em></h3>
 <p><%= @season.synopsis %></p>
-  <div class="row row-cols-2 g-3">
+  <div class="row row-cols-2 g-3 justify-content-center">
     <% @season.episodes.each do |episode| %>
       <div class="col">
         <div class="episode-card">
