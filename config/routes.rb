@@ -13,11 +13,10 @@ Rails.application.routes.draw do
 
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Actor route
-  get "actor/show", to: "actor#show"
-
-  # Watchlist media routes
+  get "media/search", to: "media#search"
+  get "actor/show", to: "actor#show", as: :actor_show
+  # Defines the root path route ("/")
+  # root "posts#index"
   resources :watchlist_media, only: [:index, :show, :create, :destroy]
 
   # User provider routes
@@ -29,4 +28,5 @@ Rails.application.routes.draw do
   post "game/like", to: "games#like", as: :game_like
   post "game/dislike", to: "games#dislike", as: :game_dislike
   post "game/skip", to: "games#skip", as: :game_skip
+  resources :seasons, only: [:show]
 end

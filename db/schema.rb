@@ -58,6 +58,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_16_092615) do
     t.bigint "season_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "runtime"
     t.index ["season_id"], name: "index_episodes_on_season_id"
   end
 
@@ -138,6 +139,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_16_092615) do
     t.text "synopsis"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
     t.index ["media_id"], name: "index_seasons_on_media_id"
   end
 

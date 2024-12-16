@@ -1,5 +1,11 @@
 require 'open-uri'
+require 'uri'
+require 'net/http'
+require 'json'
+
 class MediaService
+
+  API_KEY = ENV['TMDB_API_KEY']
 
   def self.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data, seasons)
     ActiveRecord::Base.transaction do
@@ -8,7 +14,7 @@ class MediaService
         m.title = media_data['title'] || m.title = media_data['name']
         m.category = media_type
         m.synopsis = media_data['overview']
-        m.creator = creator&.[]('name') || "Unknown Creator"
+        m.creator = creator.present? ? creator['name'] : "N/A"
         m.release_date = media_data['release_date'] || m.release_date = media_data['first_air_date']
         m.run_time = media_data['runtime']
 
@@ -44,7 +50,8 @@ class MediaService
   #   need more knowledge on handling videos
   # end
   def self.create_cast_associations(media, cast_data)
-    return unless cast_data
+    return if !cast_data || !media.actors.empty?
+
     cast_data.each do |cast_member|
       member_details = TmdbService.fetch_cast_member_details(cast_member['id'])
       actor = Actor.find_or_create_by(api_id: cast_member['id']) do |a|
@@ -107,17 +114,41 @@ class MediaService
   end
 
   def self.create_season_associations(media, seasons)
-    return unless seasons
+    return if !seasons || !media.seasons.empty?
+
     seasons.each do |s|
       season = Season.create!(
         media_id: media.id,
         number: s['season_number'],
         no_of_episodes: s['episode_count'],
-        synopsis: s['overview']
+        synopsis: s['overview'],
+        name: s['name']
       )
       if s['poster_path']
         poster_url = "https://image.tmdb.org/t/p/original#{s['poster_path']}"
         season.poster.attach(io: URI.open(poster_url), filename: File.basename(poster_url), content_type: 'image/jpeg')
+      end
+
+      episodes_url = URI("https://api.themoviedb.org/3/tv/#{media.api_id}/season/#{s['season_number']}?language=en-US")
+
+      http = Net::HTTP.new(episodes_url.host, episodes_url.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Get.new(episodes_url)
+      request["accept"] = 'application/json'
+      request["Authorization"] = "Bearer #{API_KEY}"
+
+      episodes_response = http.request(request)
+      episodes_data = JSON.parse(episodes_response.read_body)
+
+      episodes_data["episodes"].each do |episode|
+        Episode.create!(
+          season_id: season.id,
+          number: episode['episode_number'],
+          name: episode['name'],
+          synopsis: episode['overview'],
+          runtime: episode['runtime']
+        )
       end
     end
   end
