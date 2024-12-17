@@ -28,8 +28,12 @@ Rails.application.routes.draw do
   end
 
   # User provider routes
-  resources :user_providers, only: [:index, :create, :destroy]
-  get "user_providers/select", to: "user_providers#select"
+  resources :user_providers, only: [:index, :create, :destroy, :update] do
+    collection do
+      get :edit
+      patch :update
+    end
+  end
 
   # Game routes
   get "game", to: "games#index", as: :game

@@ -10,3 +10,8 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
+
+
+.main-content {
+  padding-bottom: 60px; // Adjust this value based on the navbar height
+}
