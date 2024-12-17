@@ -14,6 +14,7 @@ class MediaController < ApplicationController
 
     @media = Media.includes(:actors, :seasons).find_by(api_id: @media_id)
     if @media
+      @reviews = @media.reviews
       render 'show'
     else
       redirect_to new_media_path(id: params[:id], title: params[:title])

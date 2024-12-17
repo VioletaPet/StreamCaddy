@@ -7,7 +7,7 @@ class Media < ApplicationRecord
   has_many :actors, through: :media_actors
   has_many :watchlist_media
   has_many :users, through: :watchlist_media
-  has_many :reviews
+  has_many :reviews, dependent: :destroy
   has_many :seasons
   has_many :episodes, through: :seasons
   has_many :progress_trackers
