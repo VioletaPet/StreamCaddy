@@ -1,0 +1,26 @@
+.bottom-navbar {
+  position: fixed;       // Fixes the navbar at the specified position
+  bottom: 0;             // Aligns the navbar at the bottom of the screen
+  left: 0;               // Aligns to the left edge of the screen
+  width: 100%;           // Ensures the navbar spans the full width
+  background-color: #000; // Navbar background color (adjust as needed)
+  color: #fff;           // Text/icon color
+  display: flex;         // Allows easy layout adjustments for icons/links
+  justify-content: space-around; // Even spacing for navbar items
+  align-items: center;   // Centers items vertically
+  padding: 10px 0;       // Adds vertical padding
+  z-index: 1000;         // Ensures the navbar stays above other content
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); // Optional shadow effect
+
+  // Navbar Item Styling
+  .navbar-item {
+    text-decoration: none;
+    color: inherit;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #FAF7D6; // Highlight color on hover
+    }
+  }
+}

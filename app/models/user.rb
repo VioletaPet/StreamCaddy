@@ -136,6 +136,8 @@ class User < ApplicationRecord
     selected_providers = sorted_providers.keys.first(selected_platforms)
 
     build_subscription_schedule(selected_providers, provider_data, user_providers)
+
+    # generate_monthly_schedule(provider_data)
   end
 
   def avatar_url
@@ -154,6 +156,79 @@ private
     'unknown'
   end
 
+  # def generate_monthly_schedule(provider_content, max_active_providers: 2, hours_per_week: 10)
+  #   hours_per_month = hours_per_week * 4 # 40 hours/month assumption
+
+  #   # Step 1: Group and calculate weighted scores and runtimes per provider
+  #   provider_summary = provider_content.map do |provider_id, contents|
+  #     total_weighted_score = contents.sum { |c| c[:score].to_f * (c[:runtime].to_i > 0 ? c[:runtime].to_i : default_runtime(c)) }
+  #     total_runtime = contents.sum { |c| c[:runtime].to_i > 0 ? c[:runtime].to_i : default_runtime(c) }
+  #     subscribed = contents.first[:subscribed]
+
+  #     {
+  #       provider_id: provider_id,
+  #       provider_name: contents.first[:provider_name],
+  #       total_weighted_score: total_weighted_score,
+  #       total_runtime: total_runtime,
+  #       content: contents.sort_by { |c| [-c[:score], -default_runtime(c)] }, # Sort by score, then runtime
+  #       subscribed: subscribed
+  #     }
+  #   end
+
+  #   # Step 2: Prioritize providers
+  #   prioritized_providers = provider_summary.sort_by do |provider|
+  #     [provider[:subscribed] ? 0 : 1, -provider[:total_weighted_score]] # Subscribed first, then by weighted score
+  #   end
+
+  #   # Step 3: Distribute runtimes into monthly buckets
+  #   schedule = []
+  #   remaining_hours = {} # Tracks remaining hours per provider
+
+  #   prioritized_providers.each do |provider|
+  #     remaining_hours[provider[:provider_name]] = provider[:total_runtime]
+  #     total_score = provider[:total_weighted_score]
+  #     months_needed = (provider[:total_runtime].to_f / hours_per_month).ceil
+
+  #     months_needed.times do |month_index|
+  #       month = schedule[month_index] ||= { providers: [], total_hours: 0 }
+  #       break if month[:providers].size >= max_active_providers
+
+  #       allocated_hours = [hours_per_month, remaining_hours[provider[:provider_name]]].min
+  #       remaining_hours[provider[:provider_name]] -= allocated_hours
+
+  #       month[:providers] << {
+  #         provider_name: provider[:provider_name],
+  #         allocated_hours: allocated_hours,
+  #         total_score: total_score,
+  #         content: provider[:content]
+  #       }
+  #     end
+  #   end
+
+  #   # Step 4: Generate output
+  #   format_schedule_output(schedule)
+  # end
+
+  # # Helper method for default runtime
+  # def default_runtime(content)
+  #   content[:media][:category] == 'tv' ? 45 : 120 # TV: 45 min/episode, Movie: 2 hours
+  # end
+
+  # # Helper method to format schedule output
+  # def format_schedule_output(schedule)
+  #   schedule.each_with_index do |month, index|
+  #     puts "Month #{index + 1}:"
+  #     month[:providers].each do |provider|
+  #       puts "  Subscribe to #{provider[:provider_name]}: #{provider[:allocated_hours]} hours (Total Score: #{provider[:total_score].round(2)})"
+  #       puts "    Content List:"
+  #       provider[:content].each do |c|
+  #         runtime = c[:runtime].to_i > 0 ? c[:runtime] : default_runtime(c)
+  #         puts "      - #{c[:media][:title]} (#{runtime} min, Score: #{c[:score]})"
+  #       end
+  #     end
+  #   end
+  # end
+
   def build_subscription_schedule(selected_providers, provider_data, user_providers)
     schedule = []
     monthly_runtime = 7200
@@ -162,7 +237,7 @@ private
     provider_content = provider_data.map { |provider, data| [provider, data[:content].dup] }.to_h
 
     scheduled_content_ids = Set.new
-    
+
     while provider_content.values.flatten.any?
       month_content = []
       remaining_runtime = monthly_runtime

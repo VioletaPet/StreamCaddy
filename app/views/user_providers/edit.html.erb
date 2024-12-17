@@ -1,0 +1,22 @@
+<%= simple_form_for(:user_provider_selection, url: user_providers_path, method: :patch) do |f| %>
+
+<h2 class="title">Choose Your Streaming Services</h2>
+
+<div class="streaming-grid">
+  <% @watch_providers.each do |provider| %>
+    <div class="streaming-item">
+      <%= check_box_tag "user_provider_selection[watch_provider_ids][]", provider.id,
+                        @user_providers.include?(provider.id),
+                        id: "provider_#{provider.id}", class: "provider-checkbox" %>
+      <label for="provider_<%= provider.id %>" class="streaming-label">
+        <%= cl_image_tag(provider.logo.key, alt: "#{provider.name} Logo", class: "streaming-logo") %>
+      </label>
+    </div>
+  <% end %>
+</div>
+
+<div class="submit-button">
+  <%= button_tag "Submit", type: "submit", class: "btn btn-primary" %>
+</div>
+
+<% end %>

@@ -49,10 +49,6 @@ class MediaService
 
   private
 
-  # def self.attach_video_to_media
-  #   need more knowledge on handling videos
-  # end
-
   def self.create_genre_associations(media, genre_data)
     genre_data.each do |genre|
       genre_record = Genre.find_by(name: genre['name'])
