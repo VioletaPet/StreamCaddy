@@ -5,8 +5,4 @@ class UsersController < ApplicationController
     @user = current_user
   end
 
-  def genre_calcs
-    user_genres = current_user.genres
-    calculate_genre_percentages(user_genres)
-  end
 end

@@ -7,6 +7,8 @@ class UserProvidersController < ApplicationController
     @available_providers = WatchProvider.where.not(id: current_user.user_providers.select(:watch_provider_id))
   end
 
+
+
   def create
     @selected_provider_ids = params[:user_provider_selection][:watch_provider_ids]
     @selected_provider_ids.shift
@@ -28,4 +30,6 @@ class UserProvidersController < ApplicationController
     @provider.destroy
     redirect_to user_providers_path
   end
+
+  
 end

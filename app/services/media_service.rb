@@ -95,6 +95,7 @@ class MediaService
       media_watch_provider.buy ||= (type == 'buy')
       media_watch_provider.rent ||= (type == 'rent')
 
+      media_watch_provider.save
     end
   end
 
