@@ -9,6 +9,8 @@
 
 // Your CSS partials
 @import "components/index";
-@import "components/button";
-@import "components/card";
 @import "pages/index";
+
+body{
+  padding-top: 80px;
+}
