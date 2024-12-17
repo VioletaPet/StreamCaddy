@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
   get "media/search", to: "media#search"
-  get "actor/show", to: "actor#show"
+  get "actor/show", to: "actor#show", as: :actor_show
   # Defines the root path route ("/")
   # root "posts#index"
   resources :watchlist_media, only: [:index, :show, :create, :destroy]
@@ -24,4 +24,5 @@ Rails.application.routes.draw do
   post "game/like", to: "games#like", as: :game_like
   post "game/dislike", to: "games#dislike", as: :game_dislike
   post "game/skip", to: "games#skip", as: :game_skip
+  resources :seasons, only: [:show]
 end
