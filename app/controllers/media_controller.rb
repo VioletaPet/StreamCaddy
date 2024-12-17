@@ -69,5 +69,8 @@ class MediaController < ApplicationController
     @movies = TmdbService.watch_providers_movies(provider_id)
     @tvshows = TmdbService.watch_providers_tv(provider_id)
 
+    if params[:query].present?
+      @movies = @movies.where('title LIKE ?', "%#{params[:query]}%")
+    end
   end
 end
