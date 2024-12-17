@@ -82,7 +82,8 @@ class WatchlistMediaController < ApplicationController
 
   def destroy
     @watchlist_media = current_user.watchlist_media.find(params[:id])
-    @watchlist_media.destroy
+    @watchlist_media.delete
     redirect_to watchlist_media_path, status: :see_other
   end
 end
+
