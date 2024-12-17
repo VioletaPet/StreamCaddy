@@ -6,7 +6,7 @@
   font-size: 14px;
   background-image: url("navbar.jpeg");
   background-size: auto;
-
+  margin-top: auto;
 }
 
 .footer-wrap {
@@ -24,4 +24,10 @@
 .footer-text {
   text-align: center;
   flex-grow: 1;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
 }

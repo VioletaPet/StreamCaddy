@@ -8,10 +8,14 @@ Rails.application.routes.draw do
 
   # Media routes
   get "media/search", to: "media#search", as: 'media_search'
-  resources :media, only: [:index, :new, :show]
-  get '/media/new/:id', to: 'media#create', as: :new_media
 
-  # Health check route
+  resources :media, only: [:index, :new, :show] do
+    resources :reviews, only: [:new, :create, :show, :index]
+  end
+
+    get '/media/new/:id', to: 'media#create', as: :new_media
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
   get "media/search", to: "media#search"
   get "actor/show", to: "actor#show", as: :actor_show
