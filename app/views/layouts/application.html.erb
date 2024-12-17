@@ -14,7 +14,7 @@
   </head>
 
   <body>
-  
+  <div class="main-content">
   <% if controller.controller_name == 'user_providers' && controller.action_name == 'index' %>
   <%= render "shared/main_navbar" %>
   <% else %>
@@ -23,7 +23,7 @@
   <%= render "shared/flashes" %>
 
     <%= yield %>
-
-    <%= render "shared/footer" %>
+  </div>
+    <%= render "shared/bottom_navbar" %>
   </body>
 </html>

@@ -1,12 +1,27 @@
 class UserProvidersController < ApplicationController
   def index
-    @user_providers = current_user.user_providers
+    @user_providers = current_user.watch_providers
+
   end
 
-  def select
-    @available_providers = WatchProvider.where.not(id: current_user.user_providers.select(:watch_provider_id))
+  def edit
+    @watch_providers = WatchProvider.all
+    @user_providers = current_user.watch_providers.pluck(:id)
   end
 
+  def update
+    if params[:user_provider_selection] && params[:user_provider_selection][:watch_provider_ids]
+      current_user.watch_provider_ids = params[:user_provider_selection][:watch_provider_ids].map(&:to_i)
+    else
+      current_user.watch_provider_ids = []
+    end
+    if current_user.save
+      redirect_to user_providers_path, notice: "Selections updated successfully!"
+    else
+      flash[:alert] = "Unable to update selections. Please try again."
+      render :edit
+    end
+  end
 
 
   def create
@@ -31,5 +46,5 @@ class UserProvidersController < ApplicationController
     redirect_to user_providers_path
   end
 
-  
+
 end
