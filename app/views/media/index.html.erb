@@ -13,8 +13,8 @@
     <h1>Movies</h1>
     <div class="row">
       <% @movies.each do |movie| %>
-        <div class="col-md-4">
-          <div class="card mb-4">
+        <div class="col-md-4 col-ms-6">
+          <div class="card-poster mb-4">
             <% if movie['poster_path'] %>
               <img src="https://image.tmdb.org/t/p/w500<%= movie['poster_path'] %>" alt="<%= movie['title'] %> Poster" class="card-img-top img-fluid rounded">
             <% else %>
@@ -32,7 +32,7 @@
     <div class="row">
       <% @tvshows.each do |show| %>
         <div class="col-md-4">
-          <div class="card mb-4">
+          <div class="card-poster mb-4">
             <% if show['poster_path'] %>
               <img src="https://image.tmdb.org/t/p/w500<%= show['poster_path'] %>" alt="<%= show['name'] %> Poster" class="card-img-top img-fluid rounded">
             <% else %>
