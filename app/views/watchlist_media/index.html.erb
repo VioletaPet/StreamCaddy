@@ -17,7 +17,7 @@
             <h5 class="card-title text-truncate text-center">
               <%= link_to item.media.title, medium_path(item.media.api_id), class: 'text-dark text-decoration-none' %>
             </h5>
-            <%= link_to 'Add a review', new_medium_review_path(item), class: 'btn btn-primary btn-sm mt-3 text-decoration-none' %>
+            <%= link_to 'Add a review', new_medium_review_path(item.media_id), class: 'btn btn-primary btn-sm mt-3 text-decoration-none' %>
             <%= link_to 'Remove from Watchlist', watchlist_medium_path(item), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: 'btn btn-danger btn-sm mt-3 text-decoration-none' %>
           </div>
         </div>
