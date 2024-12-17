@@ -1,6 +1,16 @@
 <div class="container mt-5">
   <h1 class="text-center display-4 mb-4">My Fabulous Watchlist</h1>
 
+  <h2>Generate Your Viewing Schedule</h2>
+  <%= form_with url: schedule_watchlist_media_path, method: :get, local: true do |form| %>
+    <div>
+      <%= form.label :platform_count, "How many platforms would you like to subscribe to?" %>
+      <%= form.number_field :platform_count, in: 1..5, step: 1, value: 1 %>
+    </div>
+    <%= form.submit "Generate Schedule", class: "btn btn-primary" %>
+  <% end %>
+
+  <div class="row g-4">
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
     <% @watchlist.each do |item| %>
       <div class="col mb-4">
@@ -24,6 +34,7 @@
       </div>
     <% end %>
   </div>
+
 
   <% if @watchlist.empty? %>
     <p>Your watchlist is empty. Go to the <%= link_to 'Movies page', media_path %> to add some!</p>

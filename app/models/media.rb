@@ -14,4 +14,13 @@ class Media < ApplicationRecord
   has_one_attached :poster
   has_one_attached :video
   has_many_attached :backdrops
+
+  def media_run_time
+    if seasons.any?
+      episodes.sum { |episode| episode.runtime.to_i }
+    else
+      run_time.to_i 
+    end
+  end
+
 end

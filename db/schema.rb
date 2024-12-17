@@ -143,6 +143,25 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_16_132041) do
     t.index ["media_id"], name: "index_seasons_on_media_id"
   end
 
+  create_table "user_creator_weights", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "creator"
+    t.float "weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_creator_weights_on_user_id"
+  end
+
+  create_table "user_genre_weights", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "genre_id", null: false
+    t.float "weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["genre_id"], name: "index_user_genre_weights_on_genre_id"
+    t.index ["user_id"], name: "index_user_genre_weights_on_user_id"
+  end
+
   create_table "user_providers", force: :cascade do |t|
     t.bigint "watch_provider_id", null: false
     t.bigint "user_id", null: false
@@ -196,6 +215,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_16_132041) do
   add_foreign_key "reviews", "media", column: "media_id"
   add_foreign_key "reviews", "users"
   add_foreign_key "seasons", "media", column: "media_id"
+  add_foreign_key "user_creator_weights", "users"
+  add_foreign_key "user_genre_weights", "genres"
+  add_foreign_key "user_genre_weights", "users"
   add_foreign_key "user_providers", "users"
   add_foreign_key "user_providers", "watch_providers"
   add_foreign_key "watchlist_media", "media", column: "media_id"
