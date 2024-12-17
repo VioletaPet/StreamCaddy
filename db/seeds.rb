@@ -1,3 +1,4 @@
+require 'open-uri'
 # This file should ensure the existence of records required to run the application in every environment (production,
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
@@ -64,113 +65,49 @@ Genre.create!(name: "War")
 # db/seeds.rb
 
 streaming_providers = [
-  { name: "Netflix", api_id: 8 },
-  { name: "Disney Plus", api_id: 337 },
-  { name: "Amazon Prime Video", api_id: 9 },
-  { name: "Apple TV Plus", api_id: 350 },
-  { name: "Apple TV", api_id: 2 },
-  { name: "Rakuten TV", api_id: 35 },
-  { name: "Crunchyroll", api_id: 283 },
-  { name: "Amazon Video", api_id: 10 },
-  { name: "Paramount Plus", api_id: 531 },
-  { name: "Channel 4", api_id: 103 },
-  { name: "Sky Go", api_id: 29 },
-  { name: "Crunchyroll Amazon Channel", api_id: 1968 },
-  { name: "BBC iPlayer", api_id: 38 },
-  { name: "MUBI", api_id: 11 },
-  { name: "Google Play Movies", api_id: 3 },
-  { name: "BFI Player", api_id: 224 },
-  { name: "Sky Store", api_id: 130 },
-  { name: "Microsoft Store", api_id: 68 },
-  { name: "Freevee", api_id: 613 },
-  { name: "Curzon Home Cinema", api_id: 189 },
-  { name: "ITVX", api_id: 41 },
-  { name: "YouTube", api_id: 192 },
-  { name: "Shudder", api_id: 99 },
-  { name: "ARROW", api_id: 529 },
-  { name: "Arrow Video Amazon Channel", api_id: 596 },
-  { name: "GuideDoc", api_id: 100 },
-  { name: "Netflix Kids", api_id: 175 },
-  { name: "YouTube Premium", api_id: 188 },
-  { name: "BFI Player Amazon Channel", api_id: 287 },
-  { name: "My5", api_id: 333 },
-  { name: "BritBox Amazon Channel", api_id: 197 },
-  { name: "MUBI Amazon Channel", api_id: 201 },
-  { name: "STUDIOCANAL PRESENTS Apple TV Channel", api_id: 642 },
-  { name: "STV Player", api_id: 593 },
-  { name: "Curiosity Stream", api_id: 190 },
-  { name: "Flix Premiere", api_id: 432 },
-  { name: "Revry", api_id: 473 },
-  { name: "DOCSVILLE", api_id: 475 },
-  { name: "Now TV", api_id: 39 },
-  { name: "Spamflix", api_id: 521 },
-  { name: "JustWatchTV", api_id: 2285 },
-  { name: "Plex", api_id: 538 },
-  { name: "WOW Presents Plus", api_id: 546 },
-  { name: "Magellan TV", api_id: 551 },
-  { name: "BroadwayHD", api_id: 554 },
-  { name: "Filmzie", api_id: 559 },
-  { name: "Acorn TV", api_id: 87 },
-  { name: "AcornTV Amazon Channel", api_id: 196 },
-  { name: "Dekkoo", api_id: 444 },
-  { name: "True Story", api_id: 567 },
-  { name: "DocAlliance Films", api_id: 569 },
-  { name: "Hoichoi", api_id: 315 },
-  { name: "Now TV Cinema", api_id: 591 },
-  { name: "CuriosityStream Amazon Channel", api_id: 603 },
-  { name: "DocuBay Amazon Channel", api_id: 604 },
-  { name: "Discovery+ Amazon Channel", api_id: 584 },
-  { name: "Fandor Amazon Channel", api_id: 199 },
-  { name: "Full Moon Amazon Channel", api_id: 597 },
-  { name: "Pokémon Amazon Channel", api_id: 599 },
-  { name: "Shout! Factory Amazon Channel", api_id: 600 },
-  { name: "Shudder Amazon Channel", api_id: 204 },
-  { name: "Eros Now Amazon Channel", api_id: 595 },
-  { name: "FilmBox Live Amazon Channel", api_id: 602 },
-  { name: "W4free", api_id: 615 },
-  { name: "Pluto TV", api_id: 300 },
-  { name: "Eventive", api_id: 677 },
-  { name: "ShortsTV Amazon Channel", api_id: 688 },
-  { name: "Cultpix", api_id: 692 },
-  { name: "FilmBox+", api_id: 701 },
-  { name: "Paramount+ Amazon Channel", api_id: 582 },
-  { name: "Discovery+", api_id: 524 },
-  { name: "Curzon Amazon Channel", api_id: 1745 },
-  { name: "Icon Film Amazon Channel", api_id: 1744 },
-  { name: "Hallmark TV Amazon Channel", api_id: 1746 },
-  { name: "Studiocanal Presents Amazon Channel", api_id: 1747 },
-  { name: "Sundance Now Amazon Channel", api_id: 205 },
-  { name: "Sooner Amazon Channel", api_id: 1757 },
-  { name: "Takflix", api_id: 1771 },
-  { name: "Klassiki", api_id: 1793 },
-  { name: "Sun Nxt", api_id: 309 },
-  { name: "Viaplay", api_id: 76 },
-  { name: "Netflix basic with Ads", api_id: 1796 },
-  { name: "Paramount Plus Apple TV Channel ", api_id: 1853 },
-  { name: "Runtime", api_id: 1875 },
-  { name: "OUTtv Amazon Channel", api_id: 607 },
-  { name: "Shahid VIP", api_id: 1715 },
-  { name: "Acorn TV Apple TV", api_id: 2034 },
-  { name: "CuriosityStream Apple TV Channel", api_id: 2060 },
-  { name: "BFI Player Apple TV Channel", api_id: 2041 },
-  { name: "Kocowa", api_id: 464 },
-  { name: "Amazon Prime Video with Ads", api_id: 2100 },
-  { name: "Arte", api_id: 234 },
-  { name: "MGM Plus Amazon Channel", api_id: 2141 },
-  { name: "Okidoki Amazon Channel", api_id: 2264 },
-  { name: "Stingray Classica Amazon Channel", api_id: 2273 },
-  { name: "Stingray Djazz Amazon Channel", api_id: 2274 },
-  { name: "Stingray Karaoke Amazon Channel", api_id: 2275 },
-  { name: "TV1000 Russian Kino Amazon Channel", api_id: 2278 },
-  { name: "ITVX Premium", api_id: 2300 },
-  { name: "Apple TV Plus Amazon Channel", api_id: 2243 },
-  { name: "Paramount Plus Premium", api_id: 2303 },
-  { name: "Paramount Plus Basic with Ads", api_id: 2304 }
+{ name: "Netflix", api_id: 8, logo_path: "/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg" },
+{ name: "Disney Plus", api_id: 337, logo_path: "/97yvRBw1GzX7fXprcF80er19ot.jpg" },
+{ name: "Amazon Prime Video", api_id: 9, logo_path: "/qGXUKTheetVXYsSs9ehYLm7rzp8.jpg" },
+{ name: "Apple TV", api_id: 2, logo_path: "/9ghgSC0MA082EL6HLCW3GalykFD.jpg" },
+{ name: "Rakuten TV", api_id: 35, logo_path: "/bZvc9dXrXNly7cA0V4D9pR8yJwm.jpg" },
+{ name: "Crunchyroll", api_id: 283, logo_path: "/mXeC4TrcgdU6ltE9bCBCEORwSQR.jpg" },
+{ name: "Paramount Plus", api_id: 531, logo_path: "/h5DcR0J2EESLitnhR8xLG1QymTE.jpg" },
+{ name: "Channel 4", api_id: 103, logo_path: "/uMWCgjsGnO5IoQtqxXOjnQA5gt9.jpg" },
+{ name: "Sky Go", api_id: 29, logo_path: "/1UrT2H9x6DuQ9ytNhsSCUFtTUwS.jpg" },
+{ name: "BBC iPlayer", api_id: 38, logo_path: "/nc8Tpsr8SqCbsTUogPDD06gGzB3.jpg" },
+{ name: "MUBI", api_id: 11, logo_path: "/fj9Y8iIMFUC6952HwxbGixTQPb7.jpg" },
+{ name: "Sky Store", api_id: 130, logo_path: "/6AKbY2ayaEuH4zKg2prqoVQ9iaY.jpg" },
+{ name: "Freevee", api_id: 613, logo_path: "/4VOCKZGiAtXMtoDyOrvHAN33uc2.jpg" },
+{ name: "ITVX", api_id: 41, logo_path: "/1LuvKw01c2KQCt6DqgAgR06H2pT.jpg" },
+{ name: "YouTube Premium", api_id: 188, logo_path: "/rMb93u1tBeErSYLv79zSTR07UdO.jpg" },
+{ name: "My5", api_id: 333, logo_path: "/5qLpN8ah2FZC8NpYFwRFwxlNjRn.jpg" },
+{ name: "BritBox Amazon Channel", api_id: 197, logo_path: "/tLBLABfFYYETf9Zk8gKEWnjhMai.jpg" },
+{ name: "Now TV", api_id: 39, logo_path: "/g0E9h3JAeIwmdvxlT73jiEuxdNj.jpg" },
+{ name: "FilmBox+", api_id: 701, logo_path: "/fbveJTcro9Xw2KuPIIoPPePHiwy.jpg" },
+{ name: "Discovery+", api_id: 524, logo_path: "/bPW3J8KlLrot95sLzadnpzVe61f.jpg" },
 ]
 
-# Loop through each provider and seed the database (e.g., create a record in the database)
-streaming_providers.each do |provider|
-  WatchProvider.create(provider)
-end
+tmdb_base_url = "https://image.tmdb.org/t/p/original"
 
-puts "Created #{WatchProvider.count} watch providers, #{Genre.count} genres, and #{User.count} users"
+
+streaming_providers.each do |provider|
+
+  watch_provider = WatchProvider.create(
+    name: provider[:name],
+    api_id: provider[:api_id]
+  )
+
+
+  logo_url = "#{tmdb_base_url}#{provider[:logo_path]}"
+  downloaded_logo = URI.open(logo_url)
+
+
+  watch_provider.logo.attach(
+    io: downloaded_logo,
+    filename: "#{provider[:name].parameterize}_logo.jpg",
+    content_type: 'image/jpeg'
+  )
+
+  puts "Seeded #{provider[:name]} with logo."
+
+end
