@@ -15,15 +15,11 @@
 
   <body>
   <div class="main-content">
-  <% if controller.controller_name == 'user_providers' && controller.action_name == 'index' %>
-  <%= render "shared/main_navbar" %>
-  <% else %>
-  <%= render "shared/navbar" %>
-  <% end %>
-  <%= render "shared/flashes" %>
+    <%= render "shared/navbar" %>
+    <%= render "shared/flashes" %>
 
     <%= yield %>
   </div>
-    <%= render "shared/bottom_navbar" %>
+    <%= render "shared/footer" %>
   </body>
 </html>
