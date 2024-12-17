@@ -20,11 +20,13 @@
         Cast
       </button>
     </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="seasons-tab" data-bs-toggle="tab" data-bs-target="#seasons" type="button" role="tab" aria-controls="seasons" aria-selected="false">
-        Seasons
-      </button>
-    </li>
+    <% if @media.seasons.present? %>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="seasons-tab" data-bs-toggle="tab" data-bs-target="#seasons" type="button" role="tab" aria-controls="seasons" aria-selected="false">
+          Seasons
+        </button>
+      </li>
+    <% end %>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">
         Reviews

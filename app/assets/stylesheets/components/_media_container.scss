@@ -1,0 +1,20 @@
+#media-tabs {
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #404040;
+}
+
+#media-tabs .nav-link {
+  border: none;
+  transition: all 0.2s ease;
+}
+
+#media-tabs .nav-link:hover {
+  background-color: #525252;
+  color: #e5e5e5;
+}
+
+#media-tabs .nav-link.active {
+  background-color: #FAF7D6;
+  color: black;
+  border: none;
+}
