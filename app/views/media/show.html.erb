@@ -63,6 +63,11 @@
         <button class="btn btn-secondary" disabled>Already in Watchlist</button>
         <% else %>
         <%= button_to 'Add to watchlist', watchlist_media_path(media_id: @media.id), method: :post, class: 'btn btn-primary' %>
+        <div class="buttons-container">
+            <i class="fa-regular fa-plus"></i>
+            <i class="fa-solid fa-ranking-star"></i>
+            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+        </div>
         <% end %>
         </div>
 
