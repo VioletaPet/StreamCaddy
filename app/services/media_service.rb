@@ -8,37 +8,40 @@ class MediaService
   API_KEY = ENV['TMDB_API_KEY']
 
   def self.create_media_with_associations(media_data, cast_data, creator, watch_providers_data, media_type, poster_data, backdrops_data, video_data, seasons)
+    media = nil
     ActiveRecord::Base.transaction do
 
-      media = Media.find_or_create_by(api_id: media_data['id']) do |m|
-        m.title = media_data['title'] || m.title = media_data['name']
-        m.category = media_type
-        m.synopsis = media_data['overview']
-        m.creator = creator.present? ? creator['name'] : "N/A"
-        m.release_date = media_data['release_date'] || m.release_date = media_data['first_air_date']
-        m.run_time = media_data['runtime']
+      media = Media.find_by(api_id: media_data['id'])
+      return media if media
+
+      unless media != nil
+        media = Media.create!(
+          api_id: media_data['id'],
+          title: media_data['title'] || media_data['name'],
+          category: media_type,
+          synopsis: media_data['overview'],
+          creator: creator.present? ? creator['name'] : "N/A",
+          release_date: media_data['release_date'] || media_data['first_air_date'],
+          run_time: media_data['runtime']
+        )
 
         if poster_data
           poster_url = "https://image.tmdb.org/t/p/original#{poster_data['file_path']}"
-          m.poster.attach(io: URI.open(poster_url), filename: File.basename(poster_url), content_type: 'image/jpeg')
+          media.poster.attach(io: URI.open(poster_url), filename: File.basename(poster_url), content_type: 'image/jpeg')
         end
-        if backdrops_data
-          backdrops_data.each do |backdrop|
-            backdrop_url = "https://image.tmdb.org/t/p/original#{backdrop['file_path']}"
-            m.backdrops.attach(io: URI.open(backdrop_url), filename: File.basename(backdrop_url), content_type: 'image/jpeg')
-          end
-        end
+
+        media.save!
       end
 
-
-
-      create_cast_associations(media, cast_data)
       create_genre_associations(media, media_data['genres'])
       create_watch_provider_associations(media, watch_providers_data)
-      create_season_associations(media, seasons)
-
-      media
     end
+
+    ProcessCastAssociationsJob.perform_later(media.id, cast_data) if cast_data.present?
+    ProcessBackdropsJob.perform_later(media.id, backdrops_data) if backdrops_data.present?
+    ProcessSeasonsJob.perform_later(media.id, seasons) if seasons.present?
+
+    media
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error("Failed to create media and associations: #{e.message}")
     nil
@@ -49,23 +52,6 @@ class MediaService
   # def self.attach_video_to_media
   #   need more knowledge on handling videos
   # end
-  def self.create_cast_associations(media, cast_data)
-    return if !cast_data || !media.actors.empty?
-
-    cast_data.each do |cast_member|
-      member_details = TmdbService.fetch_cast_member_details(cast_member['id'])
-      actor = Actor.find_or_create_by(api_id: cast_member['id']) do |a|
-        a.name = cast_member['name']
-        a.bio = member_details['biography']
-
-      end
-      if cast_member['profile_path'].present? && !actor.photos.attached?
-        profile_url = "https://image.tmdb.org/t/p/original#{cast_member['profile_path']}"
-        actor.photos.attach(io: URI.open(profile_url), filename: File.basename(profile_url), content_type: 'image/jpeg')
-      end
-      MediaActor.create!(media_id: media['id'], actor_id: actor['id'] , character: cast_member['character'])
-    end
-  end
 
   def self.create_genre_associations(media, genre_data)
     genre_data.each do |genre|
