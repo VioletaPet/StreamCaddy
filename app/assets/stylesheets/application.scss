@@ -10,8 +10,12 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
+@import "pages/schedule";
 
 
+.main-content {
+  padding-bottom: 60px; // Adjust this value based on the navbar height
+}
 h1, p {
   color: #FAF7D6;
 }
@@ -19,4 +23,3 @@ h1, p {
 body {
   background-color: #2A2A2A;
 }
-

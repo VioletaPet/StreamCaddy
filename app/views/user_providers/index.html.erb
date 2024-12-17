@@ -1,22 +1,23 @@
-<div class="banner mb-5">
-<div class="banner-content">
-<h1>Welcome to StreamCaddy</h1>
-<p>Your personalized streaming assistant!</p>
-<%= link_to 'Browse Movies/TvShows', media_path, class: 'btn btn-dark' %>
-</div>
+<!-- Current Streaming Page -->
+<h2 class="title">Your current streaming platforms</h2>
+
+<div class="streaming-grid">
+  <% @user_providers.each do |provider| %>
+    <div class="streaming-item">
+      <%= cl_image_tag(provider.logo.key, alt: "#{provider.name} Logo", class: "streaming-logo selected") %>
+    </div>
+  <% end %>
 </div>
 
-<div class="user-providers-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-  <h1>Your Streaming Platforms</h1>
-  <div class="providers d-flex mb-3">
-    <% @user_providers.each do |user_provider| %>
-      <div class="provider-card bg-white" style="display: flex; justify-content: center; align-items: center; margin-right: 15px; padding: 20px; height: 50px; witdh: 150px">
-        <span>
-          <%= user_provider.watch_provider.name %>
-          <%= link_to "x", user_provider_path(user_provider), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-outline-danger btn-sm", style: "border-radius: 50%" %>
-        </span>
-      </div>
-    <% end %>
-  </div>
-  <%= link_to "Add", user_providers_select_path, class: "btn btn-primary" %>
+<p class="helper-text">
+  StreamCaddy helps you optimise your subscriptions!<br>
+  How many would you like to remove?
+</p>
+
+<div class="select-dropdown">
+  <%= select_tag :remove_count, options_for_select([1, 2, 3, 4, 5]), class: "dropdown-select" %>
+</div>
+
+<div class="submit-button">
+  <%= link_to "Edit", edit_user_providers_path, class: "btn btn-primary" %>
 </div>
