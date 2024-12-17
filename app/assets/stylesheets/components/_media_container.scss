@@ -1,0 +1,99 @@
+#poster {
+  border-radius: 5px;
+}
+
+#media-tabs {
+  background-color: transparent;
+  border-bottom: none;
+  gap: 2px;
+  display: flex;
+  margin-top: 15px;
+  justify-content: center;
+
+  .nav-link {
+    background-color: #1a1a1a;
+    color: #FAF7D6;
+    border: none;
+    transition: all 0.2s ease;
+    height: 30px;
+    width: 70px;
+    border-radius: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-size: smaller;
+  }
+
+  .nav-link:hover {
+    background-color: #525252;
+    color: #e5e5e5;
+  }
+
+  .nav-link.active {
+    background-color: #FAF7D6;
+    color: black;
+    border: none;
+  }
+
+  .nav-link:focus, .nav-link:active {
+    outline: none;
+    border: none;
+  }
+}
+
+#media-tabs-content {
+  background-color: #000000;
+  font-size: smaller;
+  border-radius: 5px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+
+  h1 {
+    font-size: large;
+    font-weight: bold;
+  }
+
+  #synopsis {
+    padding: 15px;
+
+    .genres-container {
+      display: flex;
+      overflow-x: auto;
+      padding: 10px 0;
+      gap: 10px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      .genre-field {
+        background-color: #151414;
+        border-radius: 5px;
+        height: 20px;
+        width: fit-content;
+        padding: 8px 16px;
+        border-radius: 4px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding-top: 0px;
+        padding-bottom: 0px;
+
+        p {
+          margin-bottom: 0px;
+          color: #FAF7D6;
+        }
+      }
+    }
+  }
+
+  #cast {
+    padding: 5px;
+  }
+
+  #seasons {
+    padding: 5px;
+  }
+}
+
+.genres-container::-webkit-scrollbar {
+  display: none;
+}
