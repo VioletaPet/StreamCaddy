@@ -1,9 +1,13 @@
 <div class="schedule-container">
+  <% today = Date.today %>
+  <% months = Date::MONTHNAMES %>
 
-  <% @schedule.each do |month| %>
+  <% @schedule.each_with_index do |month| %>
+    <% displayed_month = today.next_month(month[:month] - 1).strftime("%B") %>
+
     <div class="month-section">
       <div class="month-title">
-        <h2>Month <%= month[:month] %></h2>
+        <h2><%= displayed_month %></h2>
       </div>
       <div class="poster-container">
         <% month[:providers].each do |provider| %>
