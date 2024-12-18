@@ -2,6 +2,8 @@
   <!-- Watchlist Title -->
   <h1 class="text-center display-4 mb-4">My Fabulous Watchlist</h1>
 
+  <div class="schedule text-center">
+
   <!-- Generate Schedule Form -->
   <h2>Generate Your Viewing Schedule</h2>
   <%= form_with url: schedule_watchlist_media_path, method: :get, local: true do |form| %>
@@ -11,6 +13,9 @@
     </div>
     <%= form.submit "Generate Schedule", class: "btn btn-primary" %>
   <% end %>
+  </div>
+
+
 
   <!-- Watchlist Content -->
   <div class="media m-3">
