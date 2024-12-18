@@ -1,57 +1,62 @@
-<div class="container mt-5">
+<div class="container mt-3">
   <!-- Watchlist Title -->
-  <h1 class="text-center display-4 mb-4">My Fabulous Watchlist</h1>
 
   <!-- Generate Schedule Form -->
-  <h2>Generate Your Viewing Schedule</h2>
-  <%= form_with url: schedule_watchlist_media_path, method: :get, local: true do |form| %>
-    <div>
-      <%= form.label :platform_count, "How many platforms would you like to subscribe to?" %>
-      <%= form.number_field :platform_count, in: 1..5, step: 1, value: 1 %>
-    </div>
-    <%= form.submit "Generate Schedule", class: "submit btn-primary" %>
-  <% end %>
+  <div class="schedule p-3">
+    <h2 class="text-center mb-3">Generate Your Viewing Schedule</h2>
+    <%= form_with url: schedule_watchlist_media_path, method: :get, local: true, class: "text-center" do |form| %>
+      <div class="form-group mb-3">
+        <%= form.label :platform_count, "How many platforms would you like to subscribe to?", class: "content mb-2" %>
+        <%= form.number_field :platform_count, in: 1..5, step: 1, value: 1, class: "form-control custome-input mx-auto w-auto text-center" %>
+      </div>
+      <%= form.submit "Generate Schedule", class: "submit" %>
+    <% end %>
+  </div>
+</div>
 
   <!-- Watchlist Content -->
   <div class="media m-3">
+    <div class="row">
+      <% @watchlist.each do |item| %>
+        <div class="col-6 col-md-4" data-genre="<%= item.media.genres %>">
+          <!-- Poster Container -->
+          <div class="card-poster mb-4">
+            <% if item.media.poster.present? %>
+              <img src="<%= url_for(item.media.poster) %>" alt="<%= item.media.title %> Poster" class="card-img-top img-fluid rounded">
+            <% else %>
+              <img src="placeholder.jpg" alt="No Poster Available" class="card-img-top img-fluid rounded">
+            <% end %>
 
-  <div class="row">
-    <% @watchlist.each do |item| %>
-      <div class="col-6 col-md-4" data-genre="<%= item.media.genres %>">
-        <!-- Poster Container -->
-        <div class="card-poster mb-4 postion-relative">
-          <% if item.media.poster.present? %>
-            <img src="<%= url_for(item.media.poster) %>" alt="<%= item.media.title %> Poster" class="card-img-top img-fluid rounded">
-          <% else %>
-            <img src="placeholder.jpg" alt="No Poster Available" class="card-img-top img-fluid rounded">
-          <% end %>
+            <!-- Card Body -->
+            <div class="card-body d-flex mt-3">
+              <h5 class="card-title">
+                <%= link_to item.media.title, medium_path(item.media.api_id), class: 'text-decoration-none' %>
+              </h5>
 
-          <!-- Remove Button -->
-          <%= link_to watchlist_medium_path(item),
-            data: { turbo_method: :delete },
-            class: 'remove-button' do %>
-          <i class="fa-solid fa-xmark"></i>
-          <% end %>
+              <!-- Review Button -->
+              <%= link_to new_medium_review_path(item.media_id),
+                          class: 'review-btn m-1 text-decoration-none',
+                          style: "padding: 2px 4px; font-size: 8px; line-height: 1;" do %>
+                <i class="fa-solid fa-pen"></i>
+              <% end %>
 
-          <!-- Card Body -->
-          <div class="card-body d-flex flex-column mt-3">
-            <h5 class="card-title text-center text-truncate">
-              <%= link_to item.media.title, medium_path(item.media.api_id), class: 'text-dark text-decoration-none' %>
-            </h5>
-
-            <!-- Buttons -->
-            <div class="mt-2 d-flex justify-content-between">
-              <%= link_to 'Add a review', new_medium_review_path(item.media_id), class: 'btn btn-primary btn-sm text-decoration-none' %>
+              <!-- Delete Button -->
+              <%= link_to watchlist_medium_path(item),
+                          data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+                          class: 'trash-btn px-2 py-1 text-decoration-none' do %>
+                <i class="fa-solid fa-trash fa-bounce fa-sm"></i>
+              <% end %>
             </div>
           </div>
         </div>
-      </div>
-    <% end %>
-  </div>
+      <% end %>
+    </div>
 
-  <!-- Empty Watchlist Message -->
-  <% if @watchlist.empty? %>
-    <p class="text-center mt-4">Your watchlist is empty. Go to the <%= link_to 'Movies page', media_path %> to add some!</p>
-  <% end %>
+    <!-- Empty Watchlist Message -->
+    <% if @watchlist.empty? %>
+      <p class="text-center mt-4">
+        Your watchlist is empty. Go to the <%= link_to 'Movies page', media_path %> to add some!
+      </p>
+    <% end %>
   </div>
 </div>
