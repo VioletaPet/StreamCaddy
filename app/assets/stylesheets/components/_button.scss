@@ -25,6 +25,70 @@ i{
   cursor: pointer;
 }
 
+.submit {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.btn-primary {
+  background-color: #000;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #333;
+  }
+}
+
+.remove-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.fa-xmark {
+  font-size: 1rem;
+}
+
+.game-button{
+  background-color: white;
+  color: #000;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  text-decoration: none;
+  padding: 0;
+  line-height: 0;
+}
+
+a{
+  text-decoration: none;
+}
+
+
+
 /* Button Icons
 add to watchlist button
 .fa-regular.fa-plus{
