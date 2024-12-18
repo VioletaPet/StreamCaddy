@@ -63,7 +63,7 @@
         <p>Creator: <%= @media.creator %></p>
       <% end %>
 
-       <div class="row mt-4">
+      <div class="row mt-4">
         <% if current_user.watchlist_media.exists?(media_id: @media.id) %>
         <button class="btn btn-secondary" disabled>Already in Watchlist</button>
         <% else %>
