@@ -220,17 +220,17 @@ class TmdbService
     JSON.parse(response.read_body)
   end
 
-  def filter_by_genre_and_watch_provider(media_type, genre_ids, )
-    url = URI("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=35%2C%2016&with_watch_providers=11%2C%2023")
+  # def filter_by_genre_and_watch_provider(media_type, genre_ids, )
+  #   url = URI("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=35%2C%2016&with_watch_providers=11%2C%2023")
 
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
+  #   http = Net::HTTP.new(url.host, url.port)
+  #   http.use_ssl = true
 
-    request = Net::HTTP::Get.new(url)
-    request["accept"] = 'application/json'
-    request["Authorization"] = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4YzA1MjM1MWM0MmY0NGY3YzE5NDZhYmUzOTJjNzlmMyIsIm5iZiI6MTczMTc3NTI2Mi40ODEsInN1YiI6IjY3MzhjYjFlMzVmMWU2ZDE3ZDJlYWQ2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Rne6bo6jxm0UtCn4jx__8ulw-y8UIE1NU7nOXKKQFmU'
+  #   request = Net::HTTP::Get.new(url)
+  #   request["accept"] = 'application/json'
+  #   request["Authorization"] = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4YzA1MjM1MWM0MmY0NGY3YzE5NDZhYmUzOTJjNzlmMyIsIm5iZiI6MTczMTc3NTI2Mi40ODEsInN1YiI6IjY3MzhjYjFlMzVmMWU2ZDE3ZDJlYWQ2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Rne6bo6jxm0UtCn4jx__8ulw-y8UIE1NU7nOXKKQFmU'
 
-    response = http.request(request)
-    puts response.read_body
-  end
+  #   response = http.request(request)
+  #   puts response.read_body
+  # end
 end
