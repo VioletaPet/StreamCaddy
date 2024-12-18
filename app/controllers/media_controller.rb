@@ -11,10 +11,9 @@ class MediaController < ApplicationController
       @user_watch_providers = api_ids.join('|')
 
       @movies = TmdbService.filter_by_watch_providers('movie', @user_watch_providers)
-
       @tvshows = TmdbService.filter_by_watch_providers('tv', @user_watch_providers)
     end
-    
+    render 'index'
   end
 
   def show
