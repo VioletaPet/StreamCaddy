@@ -1,22 +1,20 @@
-<% if @schedule.present? %>
-  <% @schedule.each_with_index do |month_data, month_index| %>
-    <h2>Month <%= month_index + 1 %></h2>
+<div class="schedule-container">
 
-    <% month_data[:providers].each do |provider_entry| %>
-      <% next unless @user_selected_providers.include?(provider_entry[:provider]) %>
-
-      <h3>Provider: <%= provider_entry[:provider] %> (Total Hours: <%= provider_entry[:hours] %>)</h3>
-      <ul>
-        <% provider_entry[:content].sort_by { |item| [-item[:score], item[:runtime].to_i] }.each do |item| %>
-          <li>
-            <strong><%= item[:media_item].title %></strong>
-            <br>
-            Score: <%= item[:score] %> | Runtime: <%= item[:runtime].to_i > 0 ? "#{item[:runtime]} mins" : "Unknown runtime" %>
-          </li>
+  <% @schedule.each do |month| %>
+    <div class="month-section">
+      <div class="month-title">
+        <h2>Month <%= month[:month] %></h2>
+      </div>
+      <div class="poster-container">
+        <% month[:providers].each do |provider| %>
+          <% provider[:content].each do |media| %>
+            <div class="poster">
+               <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
+            </div>
+          <% end %>
         <% end %>
-      </ul>
-    <% end %>
+      </div>
+    </div>
   <% end %>
-<% else %>
-  <p>No schedule available. Please check your watchlist settings.</p>
-<% end %>
+
+</div>
