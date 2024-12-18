@@ -48,7 +48,7 @@
       <div class="row">
         <% @movies.each do |movie| %>
           <div class="col-6 col-md-4" data-type="movie" data-genre="<%= movie['genre'] %>">
-
+            <% if movie[‘poster_path’] %>
             <div class="card-poster mb-4">
               <img src="https://image.tmdb.org/t/p/w500<%= movie['poster_path'] %>" alt="<%= movie['title'] %> Poster" class="card-img-top img-fluid rounded">
             <% else %>
@@ -75,6 +75,7 @@
       <div class="row">
         <% @tvshows.each do |show| %>
           <div class="col-6 col-md-4" data-type="tvshow" data-genre="<%= show['genre'] %>">
+          <% if show[‘poster_path’] %>
             <div class="card-poster mb-4">
               <img src="https://image.tmdb.org/t/p/w500<%= show['poster_path'] %>" alt="<%= show['name'] %> Poster" class="card-img-top img-fluid rounded">
             <% else %>

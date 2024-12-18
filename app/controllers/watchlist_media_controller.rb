@@ -13,11 +13,11 @@ class WatchlistMediaController < ApplicationController
       next unless media_item
 
 
-     if media_item.watch_providers.empty?
+      if media_item.watch_providers.empty?
       score = current_user.score_media_item(media_item, 'unreleased')
       @unreleased_content << { media: media_item, score: score }
       next
-     end
+      end
 
       media_item.watch_providers.each do |provider|
         next unless user_providers.include?(provider.id)
