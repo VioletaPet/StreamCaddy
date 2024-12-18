@@ -1,3 +1,8 @@
+#back {
+  font-size: 25px;
+  color: #FAF7D6;
+}
+
 #poster {
   border-radius: 5px;
 }
@@ -48,11 +53,19 @@
   font-size: smaller;
   border-radius: 5px;
   margin-top: 15px;
-  margin-bottom: 5px;
 
   h1 {
     font-size: large;
     font-weight: bold;
+  }
+
+  #info {
+    color: #FAF7D6;
+    font-size: 20px;
+  }
+
+  p {
+    margin-bottom: 0px;
   }
 
   #synopsis {
@@ -91,6 +104,23 @@
 
   #seasons {
     padding: 5px;
+  }
+
+  #reviews {
+    padding: 10px;
+
+    .row {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    #review-content {
+      background-color: #151414;
+      padding: 5px;
+      border-radius: 6px;
+      width: 48%;
+    }
   }
 }
 
