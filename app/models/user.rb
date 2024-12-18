@@ -144,33 +144,46 @@ class User < ApplicationRecord
 
       active_providers.each do |provider|
 
+        provider_name = provider.first
         content = provider.second[:content]
         provider_runtime = provider.second[:total_runtime]
 
+        month_runtime = [remaining_runtime[provider_name], provider_runtime].min
+
         month_data[:providers] << {
-          provider: provider.first,
+          provider: provider_name,
           content: content,
-          total_runtime: (provider_runtime / 60.0).round(1)
+          total_runtime: (month_runtime / 60.0).round(1)
         }
 
         month_data[:total_runtime] += provider_runtime / 60.0
+        month_data[:total_runtime] += month_runtime / 60.0
+        remaining_runtime[provider_name] -= month_runtime
+
+      end
+      active_providers.delete_if do |provider|
+        provider_name = provider.first
+        remaining_runtime[provider_name] <= 0
       end
 
-      # active_providers.delete_if { |provider| remaining_runtime[provider.first] <= 0 }
+      if active_providers.size < provider_no
+        current_providers = active_providers.map { |p| p[0] }
+        next_best_providers = sorted_providers.keys.reject do |provider_name|
+          current_providers.include?(provider_name) || remaining_runtime[provider_name] <= 0
+        end
 
-      # if active_providers.size < provider_no
+        break if next_best_providers.empty? # Exit if no more providers available
 
-      #   current_providers = active_providers.map { |p| p[0] }
-      #   next_best_providers = sorted_providers.keys - current_providers
-      #   next_best_providers.first(provider_no - active_providers.size).each do |next_provider|
-      #     active_providers << [next_provider, sorted_providers[next_provider]]
-      #   end
-      # end
+        next_best_providers.first(provider_no - active_providers.size).each do |next_provider|
+          active_providers << [next_provider, sorted_providers[next_provider]]
+        end
+      end
 
       monthly_schedule << month_data
-      month_index += 1
-    end
 
+      month_index += 1
+
+    end
     monthly_schedule
   end
 
