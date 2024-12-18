@@ -87,6 +87,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_16_132041) do
     t.bigint "media_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "character"
     t.index ["actor_id"], name: "index_media_actors_on_actor_id"
     t.index ["media_id"], name: "index_media_actors_on_media_id"
   end
