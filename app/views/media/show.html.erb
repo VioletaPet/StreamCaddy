@@ -1,11 +1,10 @@
-<div class="container mt-5">
+<div class="container mt-3">
   <div class="col-md-6">
     <% if @media.poster %>
-      <img src="<%= url_for(@media.poster) %>" alt="<%= @media.title %> Poster" class="img-fluid rounded">
+      <img src="<%= url_for(@media.poster) %>" id="poster" alt="<%= @media.title %> Poster" class="img-fluid">
     <% else %>
       <p>No poster available</p>
     <% end %>
-    <h1><%= @media.title %></h1>
   </div>
 
   <!-- Navigation Tabs -->
@@ -20,11 +19,13 @@
         Cast
       </button>
     </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="seasons-tab" data-bs-toggle="tab" data-bs-target="#seasons" type="button" role="tab" aria-controls="seasons" aria-selected="false">
-        Seasons
-      </button>
-    </li>
+    <% if @media.seasons.present? %>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="seasons-tab" data-bs-toggle="tab" data-bs-target="#seasons" type="button" role="tab" aria-controls="seasons" aria-selected="false">
+          Seasons
+        </button>
+      </li>
+    <% end %>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">
         Reviews
@@ -33,26 +34,27 @@
   </ul>
 
   <!-- Tab Content -->
-  <div class="tab-content mt-3" id="media-tabs-content">
+  <div class="tab-content" id="media-tabs-content">
     <!-- Synopsis Tab -->
     <div class="tab-pane fade show active" id="synopsis" role="tabpanel" aria-labelledby="synopsis-tab">
-      <div class="genres-container d-flex">
+      <h1><%= @media.title %></h1>
+      <div class="genres-container">
         <% if @media.genres.present? %>
           <% @media.genres.each do |genre| %>
-            <div class="genre-field mx-3">
+            <div class="genre-field">
               <p><em><%= genre[:name] %></em></p>
             </div>
           <% end %>
         <% end %>
       </div>
       <% if @media.synopsis.present? %>
-        <p><%= @media.synopsis %></p>
+        <p class="mb-0"><%= @media.synopsis %></p>
       <% end %>
       <% if @media.run_time.present? %>
-        <p><strong>Runtime:</strong> <%= @media.run_time %>min</p>
+        <p><em><%= @media.run_time %>min</em></p>
       <% end %>
       <% if @media.release_date.present? %>
-        <p> Release Date: <%= @media.release_date.day.ordinalize %> <%= @media.release_date.strftime("%B %Y") %></p>
+        <p class="mb-0"> Release Date: <%= @media.release_date.day.ordinalize %> <%= @media.release_date.strftime("%B %Y") %></p>
       <% end %>
       <% if @media.creator.present? %>
         <p>Creator: <%= @media.creator %></p>
@@ -63,6 +65,11 @@
         <button class="btn btn-secondary" disabled>Already in Watchlist</button>
         <% else %>
         <%= button_to 'Add to watchlist', watchlist_media_path(media_id: @media.id), method: :post, class: 'btn btn-primary' %>
+        <div class="buttons-container">
+            <i class="fa-regular fa-plus"></i>
+            <i class="fa-solid fa-ranking-star"></i>
+            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+        </div>
         <% end %>
         </div>
 
@@ -73,18 +80,27 @@
 
     <!-- Cast Tab -->
     <div class="tab-pane fade" id="cast" role="tabpanel" aria-labelledby="cast-tab">
-      <div class="container">
-        <div class="row row-cols-2 g-3">
+      <div class="container" id="actor-container">
+        <div class="row row-cols-2 g-2">
           <% @media.actors.each do |actor| %>
             <div class="col">
-              <div class="actor-card d-flex flex-column">
+              <div class="actor-card">
                 <% if actor.photos.attached? %>
-                  <%= cl_image_tag actor.photos.first.key, alt: "#{actor.name} Poster", class: "img-fluid rounded", style: "height: 100px; width: 50px" %>
+                  <%= cl_image_tag actor.photos.first.key, alt: "#{actor.name} Poster", class: "img-fluid" %>
                 <% else %>
                   <p>No image available</p>
                 <% end %>
-                <%= actor.name %>
-                <%= link_to 'More', actor_show_path(actor, media_id: @media.id) %>
+                <div class="actor-info">
+                  <div>
+                    <p><strong><%= actor.name %></strong></p>
+                    <p class="character"><%= actor.media_actors.find_by(media_id: @media.id).character %></p>
+                  </div>
+                  <div>
+                    <%= link_to actor_show_path(actor, media_id: @media.id) do %>
+                      <i class="fa-solid fa-circle-info" id="info"></i>
+                    <% end %>
+                  </div>
+                </div>
               </div>
             </div>
           <% end %>
@@ -94,8 +110,8 @@
 
     <!-- Seasons Tab -->
     <div class="tab-pane fade" id="seasons" role="tabpanel" aria-labelledby="seasons-tab">
-      <div class="container">
-        <div class="row row-cols-2 g-3">
+      <div class="container" id="season-container">
+        <div class="row row-cols-2 g-2">
           <% if @media.seasons.present? %>
             <% @media.seasons.sort_by(&:number).each do |season| %>
               <div class="col">
@@ -103,8 +119,10 @@
                   <% if season.poster.attached? %>
                     <%= image_tag url_for(season.poster), class: "img-fluid" %>
                   <% end %>
-                  <p class="season-name mb-0"><%= season.name.present? ? season.name : "Season #{season.number}" %></p>
-                  <%= link_to 'Episodes', season_path(season.id) %>
+                  <div class="season-info">
+                    <p class="season-name mb-0"><%= season.name.present? ? season.name : "Season #{season.number}" %></p>
+                    <%= link_to 'Episodes', season_path(season.id) %>
+                  </div>
                 </div>
               </div>
             <% end %>

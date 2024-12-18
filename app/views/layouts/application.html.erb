@@ -14,16 +14,12 @@
   </head>
 
   <body>
-  
-  <% if controller.controller_name == 'user_providers' && controller.action_name == 'index' %>
-  <%= render "shared/main_navbar" %>
-  <% else %>
-  <%= render "shared/navbar" %>
-  <% end %>
-  <%= render "shared/flashes" %>
+  <div class="main-content">
+    <%= render "shared/navbar" %>
+    <%= render "shared/flashes" %>
 
     <%= yield %>
-
+  </div>
     <%= render "shared/footer" %>
   </body>
 </html>
