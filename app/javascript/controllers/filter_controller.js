@@ -5,18 +5,25 @@ export default class extends Controller {
 
 
   filterContent(event) {
-    const selectedFilter = event.target.value;
+    const selectedType = event.target.value;
 
-    switch (selectedFilter) {
-      case "all":
-        this.showAll();
-        break;
-      case "movies":
-        this.showMovies();
-        break;
-      case "tvshows":
-        this.showTVShows();
-        break;
+    if (selectedType === "all") {
+      this.showAll();
+    } else if (selectedType === "movies") {
+      this.filterByType("movies");
+    } else if (selectedType === "tvshows") {
+      this.filterByType("tvshows");
+    }
+  }
+
+
+  filterByGenre(event) {
+    const selectedGenre = event.target.value;
+
+    if (selectedGenre === "all") {
+      this.showAll();
+    } else {
+      this.filterBySelectedGenre(selectedGenre);
     }
   }
 
@@ -25,13 +32,36 @@ export default class extends Controller {
     this.tvshowsTarget.style.display = "block";
   }
 
-  showMovies() {
-    this.moviesTarget.style.display = "block";
-    this.tvshowsTarget.style.display = "none";
+  filterByType(type) {
+    const movieElements = this.moviesTarget.querySelectorAll("[data-type]");
+    const tvShowElements = this.tvshowsTarget.querySelectorAll("[data-type]");
+
+    movieElements.forEach(movie => movie.style.display = "none");
+    tvShowElements.forEach(show => show.style.display = "none");
+
+    if (type === "movies") {
+      movieElements.forEach(movie => movie.style.display = "block");
+    } else if (type === "tvshows") {
+      tvShowElements.forEach(show => show.style.display = "block");
+    }
   }
 
-  showTVShows() {
-    this.moviesTarget.style.display = "none";
-    this.tvshowsTarget.style.display = "block";
+  filterBySelectedGenre(genre) {
+    const movieElements = this.moviesTarget.querySelectorAll("[data-genre]");
+    const tvShowElements = this.tvshowsTarget.querySelectorAll("[data-genre]");
+
+    movieElements.forEach(movie => movie.style.display = "none");
+    tvShowElements.forEach(show => show.style.display = "none");
+
+    movieElements.forEach(movie => {
+      if (movie.getAttribute("data-genre") === genre) {
+        movie.style.display = "block";
+      }
+    });
+    tvShowElements.forEach(show => {
+      if (show.getAttribute("data-genre") === genre) {
+        show.style.display = "block";
+      }
+    });
   }
 }
