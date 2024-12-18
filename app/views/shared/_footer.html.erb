@@ -2,11 +2,25 @@
 
 <footer class="footer text-white text-center py-3 mt-auto">
   <div class="footer-wrap">
-    <i class="fa-solid fa-house"></i>
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <i class="fa-regular fa-calendar-days"></i>
-    <i class="fa-solid fa-bars-staggered"></i>
-    <i class="fa-solid fa-shuffle"></i>
+    <%= link_to media_path, class: "icon-link" do %>
+      <i class="fa-solid fa-house"></i>
+    <% end %>
+
+    <%= link_to media_path, class: "icon-link" do %>
+      <i class="fa-solid fa-magnifying-glass"></i>
+    <% end %>
+
+    <%= link_to schedule_watchlist_media_path, class: "icon-link" do %>
+      <i class="fa-regular fa-calendar-days"></i>
+    <% end %>
+
+    <%= link_to watchlist_media_path, class: "icon-link" do %>
+      <i class="fa-solid fa-bars-staggered"></i>
+    <% end %>
+
+    <%= link_to game_path, class: "icon-link" do %>
+      <i class="fa-solid fa-shuffle"></i>
+    <% end %>
   </div>
 </footer>
 
