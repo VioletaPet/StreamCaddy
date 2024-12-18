@@ -33,18 +33,11 @@
                 <%= link_to item.media.title, medium_path(item.media.api_id), class: 'text-decoration-none' %>
               </h5>
 
-              <!-- Review Button -->
-              <%= link_to new_medium_review_path(item.media_id),
-                          class: 'review-btn m-1 text-decoration-none',
-                          style: "padding: 2px 4px; font-size: 8px; line-height: 1;" do %>
-                <i class="fa-solid fa-pen"></i>
-              <% end %>
-
               <!-- Delete Button -->
               <%= link_to watchlist_medium_path(item),
-                          data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
-                          class: 'trash-btn px-2 py-1 text-decoration-none' do %>
-                <i class="fa-solid fa-trash fa-bounce fa-sm"></i>
+                          data: { turbo_method: :delete },
+                          class: 'icon-button' do %>
+                <i class="fa-solid fa-trash" id="index-button"></i>
               <% end %>
             </div>
           </div>

@@ -21,7 +21,7 @@ class GamesController < ApplicationController
       redirect_to game_path
     else
       LikeMediaJob.perform_later(current_user.id, media_params)
-      redirect_to game_path, notice: "Item is being added to your watchlist"
+      redirect_to game_path
     end
   end
 

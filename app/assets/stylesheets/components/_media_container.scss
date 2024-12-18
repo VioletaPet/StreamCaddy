@@ -124,6 +124,18 @@
   }
 }
 
+.reviews-container {
+  position: relative;
+}
+
+.add-review{
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .genres-container::-webkit-scrollbar {
   display: none;
 }
