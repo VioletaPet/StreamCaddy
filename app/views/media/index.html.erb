@@ -1,6 +1,4 @@
 <div class="container mt-3" data-controller="filter">
-
-  <!-- Type Filter Dropdown -->
   <div class="filter d-flex">
     <select id="filter-dropdown" class="form-select" data-action="change->filter#filterContent">
       <option value="all" selected>All</option>
@@ -8,7 +6,6 @@
       <option value="tvshows">TV Shows</option>
     </select>
 
-    <!-- Genre Filter Dropdown -->
     <select id="genre-dropdown" class="form-select" data-action="change->filter#filterByGenre">
       <option value="all">All Genres</option>
       <option value="action-adventure">Action & Adventure</option>
@@ -41,15 +38,17 @@
     </select>
   </div>
 
-  <!-- Media Cards Section -->
+<%# <p class="toggle" id="filter-tv">Trending</p> %>
+
   <div class="media mt-2">
-    <!-- Movies Section -->
-    <div id="movies-section" data-filter-target="movies">
-      <div class="row">
-        <% @movies.each do |movie| %>
-          <div class="col-6 col-md-4" data-type="movie" data-genre="<%= movie['genre'] %>">
-            <% if movie[‘poster_path’] %>
-            <div class="card-poster mb-4">
+
+  <div id="movies-section" data-filter-target="movies">
+    <h1>Movies</h1>
+    <div class="row">
+      <% @movies.each do |movie| %>
+        <div class="col-6 col-md-4" data-genre="<%= movie['genre'] %>">
+          <div class="card-poster mb-4">
+            <% if movie['poster_path'] %>
               <img src="https://image.tmdb.org/t/p/w500<%= movie['poster_path'] %>" alt="<%= movie['title'] %> Poster" class="card-img-top img-fluid rounded">
             <% else %>
               <img src="placeholder.jpg" alt="No poster available" class="card-img-top img-fluid rounded">
@@ -65,18 +64,18 @@
             </div>
             </div>
           </div>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
+  </div>
 
-    <!-- TV Shows Section -->
-    <div id="tvshows-section" data-filter-target="tvshows">
-      <h1>TV Shows</h1>
-      <div class="row">
-        <% @tvshows.each do |show| %>
-          <div class="col-6 col-md-4" data-type="tvshow" data-genre="<%= show['genre'] %>">
-          <% if show[‘poster_path’] %>
-            <div class="card-poster mb-4">
+  <div class="tvshows-section" data-filter-target="tvshows">
+    <h1>TV Shows</h1>
+    <div class="row">
+      <% @tvshows.each do |show| %>
+        <div class="col-6 col-md-4" data-genre="<%= show['genre'] %>">
+          <div class="card-poster mb-4">
+            <% if show['poster_path'] %>
               <img src="https://image.tmdb.org/t/p/w500<%= show['poster_path'] %>" alt="<%= show['name'] %> Poster" class="card-img-top img-fluid rounded">
             <% else %>
               <img src="placeholder.jpg" alt="No poster available" class="card-img-top img-fluid rounded">
@@ -92,11 +91,13 @@
             </div>
             </div>
           </div>
+        </div>
         <% end %>
       </div>
     </div>
   </div>
 </div>
+
   <!-- Search Form -->
   <div class="search mb-4">
     <%= simple_form_for :search, url: media_search_path, method: :get, input_html: { class: 'd-flex align-items-center' } do |f| %>
