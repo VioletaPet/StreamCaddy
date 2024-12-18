@@ -15,12 +15,18 @@ class Media < ApplicationRecord
   has_one_attached :video
   has_many_attached :backdrops
 
-  def media_run_time
-    if seasons.any?
-      episodes.sum { |episode| episode.runtime.to_i }
+  def calculate_runtime(media)
+    if media.category == 'tv'
+      runtime = media.seasons.includes(:episodes).sum do |season|
+        season.episodes.sum { |episode| episode.runtime.to_i > 0 ? episode.runtime.to_i : 45 }
+      end
     else
-      run_time.to_i 
+      runtime = media[:run_time].to_i
     end
+    media.update(run_time: runtime) if media.respond_to?(:runtime=)
+
+    runtime
   end
+
 
 end
