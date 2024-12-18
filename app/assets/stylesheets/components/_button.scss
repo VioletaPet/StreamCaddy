@@ -1,11 +1,9 @@
 .icon-button {
   background: none;
   border: none;
-  cursor: pointer;
   font-weight: 800;
   font-size: xx-large;
   color: #d9d9d9;
-  margin-left: 10px;
 }
 
 .buttons-container{
@@ -33,7 +31,7 @@ i{
 .btn-primary {
   background-color: #000;
   color: #fff;
-  padding: 0.8rem 1.5rem;
+  padding: 0.4rem 1.5rem;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
@@ -43,6 +41,10 @@ i{
   &:hover {
     background-color: #333;
   }
+}
+
+.btn-primary.review{
+  background-color: #2a2a2a;
 }
 
 .remove-button {
@@ -71,8 +73,8 @@ i{
 .game-button{
   background-color: white;
   color: #000;
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -81,13 +83,19 @@ i{
   text-decoration: none;
   padding: 0;
   line-height: 0;
+  font-size: 250%;
 }
 
 a{
   text-decoration: none;
 }
 
-
+#index-button{
+  font-size: large;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
 /* Button Icons
 add to watchlist button
