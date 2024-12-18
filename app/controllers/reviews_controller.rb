@@ -1,8 +1,4 @@
 class ReviewsController < ApplicationController
-  def show
-    @review = Review.find(params[:id])
-  end
-
   def new
     @watchlist_item = Media.find(params[:medium_id])
     @review = @watchlist_item.reviews.new

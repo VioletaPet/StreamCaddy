@@ -13,11 +13,11 @@ class WatchlistMediaController < ApplicationController
       next unless media_item
 
 
-     if media_item.watch_providers.empty?
+      if media_item.watch_providers.empty?
       score = current_user.score_media_item(media_item, 'unreleased')
       @unreleased_content << { media: media_item, score: score }
       next
-     end
+      end
 
       media_item.watch_providers.each do |provider|
         next unless user_providers.include?(provider.id)
@@ -75,7 +75,6 @@ class WatchlistMediaController < ApplicationController
       media_scores = current_user.calculate_media_scores
       provider_groups = current_user.group_by_provider(media_scores)
       @schedule = current_user.generate_watchlist(provider_groups, max_providers_per_month: platform_count)
-      raise
       @user_selected_providers = user_providers
     else
       @schedule = []

@@ -13,6 +13,8 @@
   <% end %>
 
   <!-- Watchlist Content -->
+  <div class="media m-3">
+
   <div class="row">
     <% @watchlist.each do |item| %>
       <div class="col-6 col-md-4" data-genre="<%= item.media.genres %>">
@@ -51,4 +53,5 @@
   <% if @watchlist.empty? %>
     <p class="text-center mt-4">Your watchlist is empty. Go to the <%= link_to 'Movies page', media_path %> to add some!</p>
   <% end %>
+  </div>
 </div>

@@ -38,8 +38,6 @@
     </select>
   </div>
 
-<%# <p class="toggle" id="filter-tv">Trending</p> %>
-
   <div class="media mt-2">
 
   <div id="movies-section" data-filter-target="movies">
@@ -53,6 +51,7 @@
             <% else %>
               <img src="placeholder.jpg" alt="No poster available" class="card-img-top img-fluid rounded">
             <% end %>
+<<<<<<< HEAD
             <div class="card-body d-flex mt-3" data-controller="button">
               <h5 class="card-title"><%= link_to movie['title'], medium_path(id: movie['id'], title: movie['title']) %></h5>
                 <%= button_tag type: "button",
@@ -60,6 +59,17 @@
                     class: "icon-button" do %>
                 <i data-button-target="button" class="fa-regular fa-plus"></i>
                 <% end %>
+=======
+            <div class="card-body d-flex mt-3">
+              <h5 class="card-title" title="<%= movie['title'] %>"><%= link_to movie['title'], medium_path(id: movie['id'], title: movie['title']) %></h5>
+              <div class="card-body" data-controller="button">
+              <%= button_tag type: "button",
+                  data: { action: "click->button#toggle" },
+                  class: "icon-button" do %>
+              <i data-button-target="button" class="fa-regular fa-plus"></i>
+              <% end %>
+            </div>
+>>>>>>> master
             </div>
           </div>
         </div>
@@ -78,8 +88,14 @@
             <% else %>
               <img src="placeholder.jpg" alt="No poster available" class="card-img-top img-fluid rounded">
             <% end %>
+<<<<<<< HEAD
             <div class="card-body d-flex mt-3" data-controller="button">
               <h5 class="card-title"><%= link_to show['name'], medium_path(id: show['id'], title: show['name']) %></h5>
+=======
+            <div class="card-body d-flex mt-3">
+              <h5 class="card-title" title="<%= show['title'] %>"><%= link_to show['name'], medium_path(id: show['id'], title: show['name']) %></h5>
+              <div class="card-body" data-controller="button">
+>>>>>>> master
               <%= button_tag type: "button",
                   data: { action: "click->button#toggle" },
                   class: "icon-button" do %>
