@@ -3,20 +3,18 @@ require_dependency '../services/tmdb_service.rb'
 class MediaController < ApplicationController
   def index
     @watch_providers = WatchProvider.all
-    @movies = TmdbService.fetch_movies
-    @tvshows = TmdbService.fetch_tv
-    # if current_user.watch_providers.empty?
-    #   @movies = TmdbService.fetch_movies
-    #   @tvshows = TmdbService.fetch_tv
-    # else
-    #   api_ids = current_user.watch_providers.pluck(:api_id)
-    #   @user_watch_providers = api_ids.join('|')
+    if current_user.watch_providers.empty?
+      @movies = TmdbService.fetch_movies
+      @tvshows = TmdbService.fetch_tv
+    else
+      api_ids = current_user.watch_providers.pluck(:api_id)
+      @user_watch_providers = api_ids.join('|')
 
-    #   @movies = TmdbService.filter_by_watch_providers('movie', @user_watch_providers)
+      @movies = TmdbService.filter_by_watch_providers('movie', @user_watch_providers)
 
-    #   @tvshows = TmdbService.filter_by_watch_providers('tv', @user_watch_providers)
-    # end
-
+      @tvshows = TmdbService.filter_by_watch_providers('tv', @user_watch_providers)
+    end
+    
   end
 
   def show

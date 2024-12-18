@@ -232,7 +232,7 @@ class TmdbService
     request["Authorization"] = "Bearer #{API_KEY}"
 
     response = http.request(request)
-    puts response.read_body
+    JSON.parse(response.read_body)
 
   end
 
@@ -255,7 +255,7 @@ class TmdbService
       request["Authorization"] = "Bearer #{API_KEY}"
 
       response = http.request(request)
-      puts response.read_body
+      JSON.parse(response.read_body)
     end
   end
 end
