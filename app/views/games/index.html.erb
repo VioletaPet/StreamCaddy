@@ -4,8 +4,8 @@
   <div class="card-poster">
     <img src="https://image.tmdb.org/t/p/w500<%= @random_media['poster_path'] %>"
        alt="<%= @random_media['title'] || @random_media['name'] %> Poster"
-       class="img-fluid rounded">
-    <h2><%= @random_media['title'] || @random_media['name'] %></h2>
+       class="img-fluid">
+    <h2 id="h2-game"><%= @random_media['title'] || @random_media['name'] %></h2>
   </div>
 
 </div>
