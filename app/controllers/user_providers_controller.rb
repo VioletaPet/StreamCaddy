@@ -1,7 +1,6 @@
 class UserProvidersController < ApplicationController
   def index
     @user_providers = current_user.watch_providers
-
   end
 
   def edit
