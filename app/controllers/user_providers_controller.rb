@@ -44,6 +44,4 @@ class UserProvidersController < ApplicationController
     @provider.destroy
     redirect_to user_providers_path
   end
-
-
 end
