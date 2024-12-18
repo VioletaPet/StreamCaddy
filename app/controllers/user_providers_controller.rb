@@ -1,7 +1,6 @@
 class UserProvidersController < ApplicationController
   def index
     @user_providers = current_user.watch_providers
-
   end
 
   def edit
@@ -45,6 +44,4 @@ class UserProvidersController < ApplicationController
     @provider.destroy
     redirect_to user_providers_path
   end
-
-
 end

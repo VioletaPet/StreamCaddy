@@ -10,7 +10,7 @@
     <% end %>
   </div>
 
-  <!-- Navigation Tabs -->
+  <%# Navigation Tabs %>
   <ul class="nav nav-tabs" id="media-tabs" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="synopsis-tab" data-bs-toggle="tab" data-bs-target="#synopsis" type="button" role="tab" aria-controls="synopsis" aria-selected="true">
@@ -36,9 +36,9 @@
     </li>
   </ul>
 
-  <!-- Tab Content -->
+  <%# Tab Content %>
   <div class="tab-content" id="media-tabs-content">
-    <!-- Synopsis Tab -->
+    <%# Synopsis Tab %>
     <div class="tab-pane fade show active" id="synopsis" role="tabpanel" aria-labelledby="synopsis-tab">
       <h1><%= @media.title %></h1>
       <div class="genres-container">
@@ -63,7 +63,8 @@
         <p>Creator: <%= @media.creator %></p>
       <% end %>
 
-       <div class="row mt-4">
+      <%# Buttons %>
+      <div class="row mt-4">
         <% if current_user.watchlist_media.exists?(media_id: @media.id) %>
           <div class="buttons-container">
           <i class="fa-solid fa-check"></i>
@@ -88,7 +89,7 @@
         </div>
     </div>
 
-    <!-- Cast Tab -->
+    <%# Cast Tab %>
     <div class="tab-pane fade" id="cast" role="tabpanel" aria-labelledby="cast-tab">
       <div class="container" id="actor-container">
         <div class="row row-cols-2 g-2">
@@ -118,7 +119,7 @@
       </div>
     </div>
 
-    <!-- Seasons Tab -->
+    <%# Seasons Tab %>
     <div class="tab-pane fade" id="seasons" role="tabpanel" aria-labelledby="seasons-tab">
       <div class="container" id="season-container">
         <div class="row row-cols-2 g-2">
@@ -148,7 +149,7 @@
       </div>
     </div>
 
-    <!-- Reviews Tab -->
+    <%# Reviews Tab %>
     <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
       <div class="reviews-container">
         <h2>Reviews</h2>
@@ -171,7 +172,8 @@
     </div>
   </div>
 
-  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="height: 80%; width: 100%">
+  <%# Backdrop %>
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <% @media.backdrops.each_with_index do |backdrop, index| %>
         <div class="carousel-item <%= 'active' if index == 0 %>">
