@@ -1,0 +1,28 @@
+.episode-container {
+  background-color: #000000;
+  border-radius: 5px;
+  padding: 8px;
+
+  .episode-card {
+    background-color: #2A2A2A;
+    padding: 8px;
+    font-size: smaller;
+    border-radius: 6px;
+    height: 100%;
+
+
+
+    .read-more-btn {
+      background: none;
+      border: none;
+      color: #f7d39e;
+      font-size: smaller;
+      padding: 0;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

@@ -6,6 +6,8 @@
     border-radius: 6px;
     background-color: #1a1a1a;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 
     img {
       height: 215px;
@@ -20,15 +22,8 @@
       padding: 8px;
       display: flex;
       justify-content: space-between;
-      height: 60px;
-
-      p {
-        margin-bottom: 0px;
-      }
-
-      #info {
-        color: #FAF7D6;
-      }
+      height: 65px;
+      margin-top: auto;
     }
 
     .character {
