@@ -69,14 +69,18 @@ class WatchlistMediaController < ApplicationController
 
   def schedule
     platform_count = params[:platform_count].to_i
+    user_providers = current_user.watch_providers.pluck(:name) # Assuming this fetches provider names
+
     if platform_count > 0
-      user_providers = current_user.watch_providers.pluck(:id)
-      @schedule = current_user.suggest_content_schedule(platform_count, user_providers)
+      media_scores = current_user.calculate_media_scores
+      provider_groups = current_user.group_by_provider(media_scores)
+      @schedule = current_user.generate_watchlist(provider_groups, max_providers_per_month: platform_count)
+      raise
+      @user_selected_providers = user_providers
     else
       @schedule = []
       flash[:alert] = "Please select a valid number of platforms."
     end
-    render :schedule
   end
 
 
@@ -86,4 +90,3 @@ class WatchlistMediaController < ApplicationController
     redirect_to watchlist_media_path, status: :see_other
   end
 end
-

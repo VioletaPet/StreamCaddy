@@ -41,7 +41,9 @@ class MediaController < ApplicationController
     end
     watch_providers_data = TmdbService.fetch_media_watch_providers(media_type, params[:id])['results']['GB']
     photo_data = TmdbService.fetch_media_images(media_type, params[:id])
-    poster_data = photo_data['posters'][0]
+    poster_data = photo_data['posters']
+               .select { |poster| poster['iso_639_1'] == 'en' }
+               .max_by { |poster| poster['vote_average'] }
     backdrops_data = photo_data['backdrops'].first(10)
     video_data = TmdbService.fetch_media_videos(media_type, params[:id])['results']
     filtered_videos = video_data.select do |video|
