@@ -9,7 +9,7 @@
       <%= form.label :platform_count, "How many platforms would you like to subscribe to?" %>
       <%= form.number_field :platform_count, in: 1..5, step: 1, value: 1 %>
     </div>
-    <%= form.submit "Generate Schedule", class: "btn btn-primary" %>
+    <%= form.submit "Generate Schedule", class: "submit btn-primary" %>
   <% end %>
 
   <!-- Watchlist Content -->
@@ -17,11 +17,18 @@
     <% @watchlist.each do |item| %>
       <div class="col-6 col-md-4" data-genre="<%= item.media.genres %>">
         <!-- Poster Container -->
-        <div class="card-poster mb-4">
+        <div class="card-poster mb-4 postion-relative">
           <% if item.media.poster.present? %>
             <img src="<%= url_for(item.media.poster) %>" alt="<%= item.media.title %> Poster" class="card-img-top img-fluid rounded">
           <% else %>
             <img src="placeholder.jpg" alt="No Poster Available" class="card-img-top img-fluid rounded">
+          <% end %>
+
+          <!-- Remove Button -->
+          <%= link_to watchlist_medium_path(item),
+            data: { turbo_method: :delete },
+            class: 'remove-button' do %>
+          <i class="fa-solid fa-xmark"></i>
           <% end %>
 
           <!-- Card Body -->
@@ -33,7 +40,6 @@
             <!-- Buttons -->
             <div class="mt-2 d-flex justify-content-between">
               <%= link_to 'Add a review', new_medium_review_path(item.media_id), class: 'btn btn-primary btn-sm text-decoration-none' %>
-              <%= link_to 'Remove', watchlist_medium_path(item), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: 'btn btn-danger btn-sm text-decoration-none' %>
             </div>
           </div>
         </div>

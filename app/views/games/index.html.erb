@@ -1,7 +1,7 @@
 <div id="tinder-game">
   <h1>Swipe to Discover Movies & TV Shows</h1>
 
-  <div id="movie-card">
+  <div class="card-poster">
     <img src="https://image.tmdb.org/t/p/w500<%= @random_media['poster_path'] %>"
        alt="<%= @random_media['title'] || @random_media['name'] %> Poster"
        class="img-fluid rounded">
@@ -9,6 +9,17 @@
   </div>
 
 </div>
-<%= link_to "Dislike", game_dislike_path(params: @random_media), data: {"turbo-method": :post} %>
-<%= link_to "Skip", game_skip_path(params: @random_media), data: {"turbo-method": :post} %>
-<%= link_to "Like", game_like_path(params: @random_media), data: {"turbo-method": :post} %>
+
+<div class="game-buttons">
+  <%= link_to game_dislike_path(params: @random_media), data: {"turbo-method": :post} do %>
+    <i class="fa-regular fa-thumbs-down game-button"></i>
+  <% end %>
+
+  <%= link_to game_skip_path(params: @random_media), data: {"turbo-method": :post} do %>
+    <i class="fa-solid fa-forward game-button"></i>
+  <% end %>
+
+  <%= link_to game_like_path(params: @random_media), data: {"turbo-method": :post} do %>
+    <i class="fa-regular fa-thumbs-up game-button"></i>
+  <% end %>
+</div>
