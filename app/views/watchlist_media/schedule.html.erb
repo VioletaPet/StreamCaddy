@@ -34,7 +34,7 @@
           <% end %>
         </div>
       </div>
-    <%= link_to schedule_month_watchlist_media_path(month: month[:month], platform_count: @platform_count), class: "poster-link" do%>
+    <%= link_to schedule_month_watchlist_media_path(month: month[:month], platform_count: @platform_count), class: "poster-link" do %>
       <div class="poster-container">
         <% month[:providers].each do |provider| %>
           <% provider[:content].each do |media| %>

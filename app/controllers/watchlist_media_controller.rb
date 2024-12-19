@@ -90,9 +90,10 @@ class WatchlistMediaController < ApplicationController
   def schedule_month
     @selected_month = params[:month].to_i
     @platform_count = params[:platform_count].to_i
+    user_providers = current_user.watch_providers.pluck(:name)
     media_scores = current_user.calculate_media_scores
     provider_groups = current_user.group_by_provider(media_scores)
-    @schedule = current_user.generate_watchlist(provider_groups, max_providers_per_month: @platform_count)
+    @schedule = current_user.generate_watchlist(provider_groups, {max_providers_per_month: @platform_count}, user_providers)
 
 
     month_data = @schedule&.find { |month| month[:month] == @selected_month }

@@ -4,9 +4,12 @@
     <% @month_providers.each do |provider| %>
       <% provider[:content].each do |media| %>
         <div class="col">
-          <div class="poster" id="monthly-poster">
-            <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
-          </div>
+          <%= link_to medium_path(id: media[:media_item].api_id, title: media[:media_item].title) do %>
+            <div class="poster" id="monthly-poster">
+              <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
+            </div>
+          <% end %>
+          
         </div>
       <% end %>
     <% end %>
@@ -14,22 +17,75 @@
   <div class="monthly-schedule-provider">
     <h3>Take action!</h3>
     <p>Based on your preferences, these are the streaming providers you'll need — subscribe to those with relevant content and cancel the ones you no longer need.</p>
-    <% @month_providers.each do |provider| %>
-      <% @active_provider = WatchProvider.find_by(name: provider[:provider]) %>
-      <div class="provider-row">
-        <% if @active_provider&.logo.attached? %>
-          <div class="monthly-provider-logo me-2">
-            <%= image_tag @active_provider.logo, alt: "#{@active_provider.name} Logo", class: "img-fluid", style: "height: 40px; width: auto;" %>
-          </div>
-        <% end %>
-        <div class="provider-buttons">
-          <% if current_user.watch_providers.exists?(id: @active_provider.id) %>
-            <button class="btn btn-primary">Cancel</button>
-          <% else %>
-            <button class="btn btn-primary">Subscribe</button>
+
+    <div class="provider-columns">
+      <%# Keep Column %>
+      <div class="provider-column">
+        <p class="column-title" id="keep">Keep</p>
+        <div class="provider-list">
+          <% @month_providers.each do |provider| %>
+            <% @active_provider = WatchProvider.find_by(name: provider[:provider]) %>
+            <% user_has_provider = current_user.watch_providers.exists?(id: @active_provider.id) %>
+            <% provider_has_media = provider[:content].any? { |media| media[:media_item].watch_providers.include?(@active_provider) } %>
+            <% if user_has_provider && provider_has_media %>
+              <div class="provider-logo">
+                <% if @active_provider&.logo.attached? %>
+                  <%= image_tag @active_provider.logo, alt: "#{@active_provider.name} Logo", class: "provider-logo" %>
+                <% end %>
+              </div>
+            <% end %>
           <% end %>
         </div>
       </div>
-    <% end %>
+
+      <%# Cancel Column %>
+      <div class="provider-column">
+        <p class="column-title" id="cancel">Cancel</p>
+        <div class="provider-list">
+          <%# Providers to cancel for current month %>
+          <% @month_providers.each do |provider| %>
+            <% @active_provider = WatchProvider.find_by(name: provider[:provider]) %>
+            <% user_has_provider = current_user.watch_providers.exists?(id: @active_provider.id) %>
+            <% provider_has_media = provider[:content].any? { |media| media[:media_item].watch_providers.include?(@active_provider) } %>
+            <% if user_has_provider && !provider_has_media %>
+              <div class="provider-logo">
+                <% if @active_provider&.logo.attached? %>
+                  <%= image_tag @active_provider.logo, alt: "#{@active_provider.name} Logo", class: "provider-logo" %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+          <%# User's providers that aren't in current month %>
+          <% current_user.watch_providers.each do |user_provider| %>
+            <% unless @month_providers.any? { |mp| mp[:provider].downcase == user_provider.name.downcase } %>
+              <div class="provider-logo">
+                <% if user_provider.logo.attached? %>
+                  <%= image_tag user_provider.logo, alt: "#{user_provider.name} Logo", class: "provider-logo" %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Subscribe Column %>
+      <div class="provider-column">
+        <p class="column-title" id="subscribe">Subscribe</p>
+        <div class="provider-list">
+          <% @month_providers.each do |provider| %>
+            <% @active_provider = WatchProvider.find_by(name: provider[:provider]) %>
+            <% user_has_provider = current_user.watch_providers.exists?(id: @active_provider.id) %>
+            <% provider_has_media = provider[:content].any? { |media| media[:media_item].watch_providers.include?(@active_provider) } %>
+            <% if !user_has_provider && provider_has_media %>
+              <div class="provider-logo">
+                <% if @active_provider&.logo.attached? %>
+                  <%= image_tag @active_provider.logo, alt: "#{@active_provider.name} Logo", class: "provider-logo" %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
