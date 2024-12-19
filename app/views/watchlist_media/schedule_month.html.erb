@@ -4,9 +4,11 @@
     <% @month_providers.each do |provider| %>
       <% provider[:content].each do |media| %>
         <div class="col">
-          <div class="poster" id="monthly-poster">
-            <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
-          </div>
+          <%= link_to media_path(id: media[:media_item].id) do %>
+            <div class="poster" id="monthly-poster">
+              <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
+            </div>
+          <% end %>
         </div>
       <% end %>
     <% end %>
