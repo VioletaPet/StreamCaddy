@@ -3,16 +3,15 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  border: 1px solid #6d86a0;
   border-radius: 12px;
   padding: 20px;
   width: 220px;
   margin: 0 auto;
-  background: #f8f9fa;
+  background: black;
 
   .btn {
     width: 105%;
-    color: white;
+    color: black;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
@@ -30,7 +29,9 @@
 
 .options .btn a {
   text-decoration: none;
-  color: white;
+  color: black;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .options .btn:active {
@@ -53,4 +54,8 @@
   object-fit: contain;
   border-radius: 50%;
   padding: 5px;
+}
+
+.form-inputs input.form-control {
+  color: black;
 }

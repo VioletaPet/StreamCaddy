@@ -61,7 +61,9 @@
 
 .media {
   background-color: #151414;
-  padding: 20px;
+  padding: 18px;
+  border-radius: 10px;
+  padding-top: 30px;
   border-radius: 12px;
   margin: 8px;
 }
@@ -124,4 +126,3 @@
   border-radius: 50%;
   object-fit: contain; /* Keep the logo aspect ratio */
 }
-
