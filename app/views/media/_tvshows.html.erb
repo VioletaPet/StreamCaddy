@@ -1,8 +1,11 @@
 <!-- app/views/media/_tvshows.html.erb -->
 <div class="tvshows-section" data-filter-target="tvshows">
   <h1>TV Shows</h1>
+    <% if results.empty? %>
+      <p> No Tv Shows available</p>
+    <% end %>
     <div class="row">
-      <% @tvshows.each do |show| %>
+      <% results.each do |show| %>
         <div class="col-6 col-md-4" data-genre="<%= show['genre'] %>">
           <div class="card-poster mb-4">
             <a href="<%= medium_path(id: show['id'], title: show['name']) %>" class="text-decoration-none d-block">
