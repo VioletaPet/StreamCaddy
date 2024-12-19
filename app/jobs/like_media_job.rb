@@ -3,12 +3,15 @@ class LikeMediaJob < ApplicationJob
 
   def perform(user_id, params)
     # Do something later
+    params = params.with_indifferent_access
     media_result = TmdbService.search_tv_movie(params['title'] || params['name'])
     media_type = media_result['results'][0]['media_type']
     media_data = TmdbService.fetch_media_details(media_type, params[:id])
     media_seasons = TmdbService.fetch_tv_show_seasons(params[:id])
+    Rails.logger.debug "Media Seasons: #{media_seasons.inspect}"
     seasons = media_seasons['seasons']
     cast_crew_data = TmdbService.fetch_cast_details(media_type, params[:id])
+    Rails.logger.debug "Cast and Crew Data: #{cast_crew_data.inspect}"
     cast_data = cast_crew_data['cast']
     crew_data = cast_crew_data['crew']
     if media_type == 'movie'

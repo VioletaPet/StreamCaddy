@@ -80,7 +80,7 @@
           <% end %>
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
           </div>
-        <% else %>
+          <% else %>
           <div class="buttons-container" data-controller="button" data-url="<%= watchlist_media_path %>", data-media-id="<%= @media.id %>">
             <%= button_tag type: "button",
                     data: { action: "click->button#toggle" },

@@ -50,8 +50,7 @@
 
   <div class="media mt-2">
 
-  <div id="movies-section" data-filter-target="movies">
-    <h1>Movies</h1>
+ 
 
   <div data-filter-target="movies" class="movies-container">
     <%= render partial: "movies", locals: { results: @movies } %>
@@ -59,4 +58,15 @@
 
   <div data-filter-target="tvshows" class="tvshows-container">
     <%= render partial: "tvshows", locals: { results: @tvshows } %>
+  </div>
+
+
+
+  <!-- Search Form -->
+  <div class="search mb-4">
+    <%= simple_form_for :search, url: media_search_path, method: :get, input_html: { class: 'd-flex align-items-center' } do |f| %>
+      <%= f.input :provider, as: :select, collection: @watch_providers, input_html: { multiple: true, class: 'form-control me-2' }, prompt: "Select a provider" %>
+      <%= f.text_field :query, class: "form-control", placeholder: 'Type a movie title', value: params[:query], data: {refresh_list_target: 'searchInput'}%>
+      <button type="submit" class="btn btn-primary">Search</button>
+    <% end %>
   </div>
