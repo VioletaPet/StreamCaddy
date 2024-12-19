@@ -4,6 +4,12 @@
   white-space: nowrap;
   max-width: 300px; /* Adjust the width as needed */
   gap: 0px; /* Spacing between logos */
+  -ms-overflow-style: none; /* Hide scrollbar for Internet Explorer */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.scroll-box::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for WebKit browsers (e.g., Chrome, Safari) */
 }
 
 .provider-logo img {
