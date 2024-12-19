@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: "user_providers#index"
+  root to: "media#index"
 
   # User show route
   get '/show', to: "users#show", as: 'show'

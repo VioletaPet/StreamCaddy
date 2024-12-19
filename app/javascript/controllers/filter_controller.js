@@ -4,63 +4,54 @@ export default class extends Controller {
   static targets = ["filterDropdown", "genreDropdown", "movies", "tvshows"];
 
   connect() {
-    console.log(this.moviesTarget)
-    // Parse the @user_providers passed via data attribute
-    this.watchProviders = JSON.parse(this.element.querySelector(".scroll-box").dataset.providers);
+    console.log(this.moviesTarget);
+    this.watchProviders = JSON.parse(
+      this.element.querySelector(".scroll-box").dataset.providers
+    );
   }
 
   filterContent() {
-    const mediaType = String(this.filterDropdownTarget.value);
+    const mediaType = this.filterDropdownTarget.value;
     const genres = this.getSelectedGenres();
 
+    // Show or hide sections based on media type
     if (mediaType === "all") {
+      this.showAll();
       this.fetchFilteredContent("movie", genres, this.watchProviders);
       this.fetchFilteredContent("tv", genres, this.watchProviders);
-    } else {
-      this.fetchFilteredContent(mediaType, genres, this.watchProviders);
+    } else if (mediaType === "movie") {
+      this.showMovies();
+      this.fetchFilteredContent("movie", genres, this.watchProviders);
+    } else if (mediaType === "tv") {
+      this.showTVShows();
+      this.fetchFilteredContent("tv", genres, this.watchProviders);
     }
   }
+
   getSelectedGenres() {
     const selectedOptions = Array.from(this.genreDropdownTarget.selectedOptions);
-    return selectedOptions.map(option => option.value);
+    return selectedOptions.map((option) => option.value);
   }
 
   fetchFilteredContent(mediaType, genres, watchProviders) {
     const genreParam = genres.join("|");
-    fetch(`/media/filter?media_type=${mediaType}&genres=${genres.join("|")}&watch_providers=${watchProviders.join("|")}`, {
-      headers: { "Accept": "text/plain" },
+    const url = `/media/filter?media_type=${mediaType}&genres=${genreParam}&watch_providers=${watchProviders.join("|")}`;
+
+    fetch(url, {
+      headers: { Accept: "text/plain" },
     })
       .then((response) => response.text())
       .then((data) => this.updateContent(data, mediaType))
       .catch((error) => console.error("Error:", error));
   }
+
   updateContent(data, mediaType) {
-    console.log(this.moviesTarget)
     if (mediaType === "movie") {
       this.moviesTarget.innerHTML = data;
     } else if (mediaType === "tv") {
       this.tvshowsTarget.innerHTML = data;
     }
   }
-
-
-
-
-  // filterContent(event) {
-  //   const selectedFilter = event.target.value;
-
-  //   switch (selectedFilter) {
-  //     case "all":
-  //       this.showAll();
-  //       break;
-  //     case "movies":
-  //       this.showMovies();
-  //       break;
-  //     case "tvshows":
-  //       this.showTVShows();
-  //       break;
-  //   }
-  // }
 
   showAll() {
     this.moviesTarget.style.display = "block";
