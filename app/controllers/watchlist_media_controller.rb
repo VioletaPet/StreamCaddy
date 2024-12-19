@@ -57,13 +57,18 @@ class WatchlistMediaController < ApplicationController
   end
 
   def create
-    @media = Media.find(params[:media_id])
-
-    @watchlist_media = current_user.watchlist_media.new(media: @media)
-    if @watchlist_media.save
-      redirect_to watchlist_media_path(@watchlist_media), notice: "Item has been added to your watchlist"
+    @media = Media.find_by(id: params[:media_id]) || Media.find_by(api_id: params[:media_id])
+    if params[:title].present?
+      media_params = { title: params[:title], id: params[:media_id] }
     else
-      redirect_to media_path, alert: 'Failed to add item to your Watchlist'
+      media_params = { name: params[:name], id: params[:media_id] }
+    end
+
+    if @media
+      @watchlist_media = current_user.watchlist_media.new(media: @media)
+      @watchlist_media.save!
+    else
+      LikeMediaJob.perform_later(current_user.id, media_params)
     end
   end
 

@@ -22,6 +22,7 @@ export default class extends Controller {
 
       const url = this.element.dataset.url;
       const mediaId = this.element.dataset.mediaId;
+      const title = this.element.dataset.title;
 
       console.log("Sending fetch request to:", url);
       console.log("Media ID:", mediaId);
@@ -35,7 +36,10 @@ export default class extends Controller {
             "Content-Type": "application/json",
             "X-CSRF-Token": csrfToken,
           },
-          body: JSON.stringify({ media_id: mediaId }),
+          body: JSON.stringify({
+            media_id: mediaId,
+            title: title
+          }),
           });
         }
     } else {
