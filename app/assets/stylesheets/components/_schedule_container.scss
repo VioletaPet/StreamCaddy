@@ -1,0 +1,28 @@
+.schedule-container {
+
+  h2 {
+    color: #FAF7D6;
+  }
+}
+
+.poster-container {
+  background-color: #1a1a1a;
+  display: flex;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  .poster {
+    flex-shrink: 0;
+    box-shadow: 1px 1px 6px #0b0b0b;
+
+    img {
+      max-height: 200px;
+      width: auto;
+    }
+  }
+}
+
+.poster-container::-webkit-scrollbar {
+  display: none;
+}
