@@ -9,15 +9,16 @@
   <% end %>
 </div>
 
-<p class="helper-text">
-  StreamCaddy helps you optimise your subscriptions!<br>
-  How many monthly subscriptions would you like to have?
-</p>
-
-<div class="select-dropdown">
-  <%= select_tag :desired_count, options_for_select([1, 2, 3, 4, 5]), class: "dropdown-select" %>
-</div>
-
 <div class="submit-button">
   <%= link_to "Edit", edit_user_providers_path, class: "btn btn-primary" %>
+</div>
+
+<p class="helper-text">
+  StreamCaddy helps you optimise your subscriptions!<br>
+  <br>
+  Start browsing now to build your watchlist!
+</p>
+
+<div class="submit-button">
+  <%= link_to "Browse Movies & TV-Shows", media_path, class: "btn btn-primary" %>
 </div>
