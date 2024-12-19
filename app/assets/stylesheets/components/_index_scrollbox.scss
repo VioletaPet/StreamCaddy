@@ -1,0 +1,30 @@
+.scroll-box {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 300px; /* Adjust the width as needed */
+  gap: 0px; /* Spacing between logos */
+}
+
+.provider-logo img {
+  height: 100px; /* Adjust height for logos */
+  width: auto;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.filter {
+  position: fixed; /* Fix the filter to the viewport */
+  top: 68px; /* Offset to align below the top navigation bar */
+  left: 0;
+  right: 0;
+  z-index: 1030; /* Ensure it appears above page content */
+  background-color: #2a2a2a; /* Match background color */
+  padding: 0.75rem 1rem; /* Add spacing */
+  margin-bottom: 120px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.mt-2 {
+  margin-top: 2.8rem !important;
+}

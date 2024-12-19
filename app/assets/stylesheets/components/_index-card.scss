@@ -101,3 +101,25 @@
     box-shadow: 0 0 5px rgba(169, 159, 160, 0.5);
   }
 }
+
+.col-md-6 {
+  position: relative; /* Ensure the parent is relative for absolute positioning */
+}
+
+.watch-provider-logo {
+  position: absolute; /* Position the logo */
+  top: 10px; /* Distance from the top */
+  right: 10px; /* Distance from the right */
+  background-color: rgba(0, 0, 0, 0); /* Optional: semi-transparent background */
+  border-radius: 50%; /* Circular container */
+  padding: 5px;
+  width: 50px; /* Adjust the size as needed */
+  height: 50px;
+}
+
+.provider-logo {
+  width: 100%; /* Fit the logo within the container */
+  height: 100%;
+  border-radius: 50%;
+  object-fit: contain; /* Keep the logo aspect ratio */
+}

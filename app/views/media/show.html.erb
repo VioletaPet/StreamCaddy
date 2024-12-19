@@ -2,11 +2,18 @@
     <%= link_to media_path do %>
     <i class="fa-solid fa-arrow-left mb-3" id="back"></i>
   <% end %>
-  <div class="col-md-6">
+  <div class="col-md-6 position-relative">
     <% if @media.poster %>
       <img src="<%= url_for(@media.poster) %>" id="poster" alt="<%= @media.title %> Poster" class="img-fluid">
     <% else %>
       <p>No poster available</p>
+    <% end %>
+    <% if @media.watch_providers && @media.watch_providers.first.logo.key %>
+      <div class="watch-provider-logo">
+        <%= cl_image_tag(@media.watch_providers.first.logo.key,
+                        alt: "#{@media.watch_providers.first.name} Logo",
+                        class: "provider-logo") %>
+      </div>
     <% end %>
   </div>
 

@@ -1,6 +1,7 @@
 require 'uri'
 require 'net/http'
 require 'json'
+require 'cgi'
 
 class TmdbService
 
@@ -222,7 +223,7 @@ class TmdbService
 
   def self.filter_by_watch_providers(media_type, watch_providers)
 
-    url = URI("https://api.themoviedb.org/3/discover/#{media_type}?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=GB&with_watch_providers=8|337")
+    url = URI("https://api.themoviedb.org/3/discover/#{media_type}?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=GB&with_watch_providers=#{watch_providers}")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -232,30 +233,37 @@ class TmdbService
     request["Authorization"] = "Bearer #{API_KEY}"
 
     response = http.request(request)
-    JSON.parse(response.read_body)
+    json_response = JSON.parse(response.read_body)
+    json_response['results']
 
   end
 
-  def filter_by_genre_and_watch_provider(media_types, genre_ids, watch_provider_ids)
-    media_types.each do |type|
-      base_url = "https://api.themoviedb.org/3/discover/#{type}?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=GB"
+  def self.filter_by_genre_and_watch_provider(media_type, genre_ids, watch_provider_ids)
 
-      filters = []
-      filters << "with_genres=#{genre_ids.join('|')}" unless genre_ids.empty?
-      filters << "with_watch_providers=#{watch_provider_ids.join('|')}" unless watch_provider_ids.empty?
+    providers = watch_provider_ids.join('|')
+    encoded_providers = CGI.escape(providers)
 
-      final_url = "#{base_url}&#{filters.join('&')}"
-      url = URI(final_url)
 
-      http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = true
 
-      request = Net::HTTP::Get.new(url)
-      request["accept"] = 'application/json'
-      request["Authorization"] = "Bearer #{API_KEY}"
 
-      response = http.request(request)
-      JSON.parse(response.read_body)
+    if genre_ids == 'all'
+      url = URI("https://api.themoviedb.org/3/discover/#{media_type}?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=GB&with_watch_providers=#{encoded_providers}")
+    else
+    url = URI("https://api.themoviedb.org/3/discover/#{media_type}?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=GB&with_genres=#{genre_ids}&with_watch_providers=#{encoded_providers}")
     end
+
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+    request["Authorization"] = "Bearer #{API_KEY}"
+
+    response = http.request(request)
+    json_response = JSON.parse(response.read_body)
+
+    json_response['results']
+    
   end
 end
