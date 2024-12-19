@@ -73,17 +73,36 @@ class WatchlistMediaController < ApplicationController
   end
 
   def schedule
-    platform_count = params[:platform_count].to_i
+    @platform_count = params[:platform_count].to_i
     user_providers = current_user.watch_providers.pluck(:name) # Assuming this fetches provider names
 
-    if platform_count > 0
+    if @platform_count > 0
       media_scores = current_user.calculate_media_scores
       provider_groups = current_user.group_by_provider(media_scores)
-      @schedule = current_user.generate_watchlist(provider_groups, max_providers_per_month: platform_count)
+      @schedule = current_user.generate_watchlist(provider_groups, max_providers_per_month: @platform_count)
+
       @user_selected_providers = user_providers
     else
       @schedule = []
       flash[:alert] = "Please select a valid number of platforms."
+    end
+  end
+
+  def schedule_month
+    @selected_month = params[:month].to_i
+    @platform_count = params[:platform_count].to_i
+    media_scores = current_user.calculate_media_scores
+    provider_groups = current_user.group_by_provider(media_scores)
+    @schedule = current_user.generate_watchlist(provider_groups, max_providers_per_month: @platform_count)
+    # raise
+
+    month_data = @schedule&.find { |month| month[:month] == @selected_month }
+
+    if month_data
+      @month_providers = month_data[:providers]
+      @displayed_month = Date.today.next_month(@selected_month - 1).strftime("%B")
+    else
+      redirect_to schedule_watchlist_media_path, alert: "Month not found"
     end
   end
 

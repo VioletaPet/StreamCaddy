@@ -1,0 +1,12 @@
+<h1><%= @displayed_month %>'s Schedule</h1>
+
+<% @month_providers.each do |provider| %>
+  <h2><%= provider[:provider_name] %></h2>
+  <div class="poster-container">
+    <% provider[:content].each do |media| %>
+      <div class="poster">
+        <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
