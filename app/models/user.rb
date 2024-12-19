@@ -129,62 +129,74 @@ class User < ApplicationRecord
     provider_groups.sort_by { |_provider, data| -data[:total_score] }.to_h
   end
 
-  def generate_watchlist(provider_groups, max_providers)
+  def generate_watchlist(provider_groups, max_providers, user_providers)
     provider_no = max_providers[:max_providers_per_month]
     monthly_schedule = []
 
+    month_index = 1
 
     sorted_providers = provider_groups.sort_by { |_, data| -data[:total_score] }.to_h
     remaining_runtime = provider_groups.transform_values { |data| data[:total_runtime] }
 
-    active_providers = sorted_providers.first(provider_no)
-    month_index = 1
+    already_suggested_content = Set.new
+
+    active_providers = user_providers.select { |p| sorted_providers.key?(p) }
+    .map { |p| [p, sorted_providers[p]] }
+
+
     while active_providers.any?
-      month_data = { month: month_index, providers: [], total_runtime: 0 }
+
 
       active_providers.each do |provider|
-
+        month_data = { month: month_index, providers: [], total_runtime: 0 }
+        
         provider_name = provider.first
-        content = provider.second[:content]
+        provider_content = provider.second[:content]
         provider_runtime = provider.second[:total_runtime]
 
+        unique_content = provider_content.reject { |item| already_suggested_content.include?(item[:media_item].id) }
+        next if unique_content.empty?
         month_runtime = [remaining_runtime[provider_name], provider_runtime].min
 
         month_data[:providers] << {
           provider: provider_name,
-          content: content,
+          content: unique_content,
           total_runtime: (month_runtime / 60.0).round(1)
         }
+
+        unique_content.each { |item| already_suggested_content.add(item[:media_item].id) }
 
         month_data[:total_runtime] += provider_runtime / 60.0
         month_data[:total_runtime] += month_runtime / 60.0
         remaining_runtime[provider_name] -= month_runtime
 
-      end
-      active_providers.delete_if do |provider|
-        provider_name = provider.first
-        remaining_runtime[provider_name] <= 0
-      end
+        redundant_providers, active_providers = active_providers.partition { |provider| remaining_runtime[provider.first] <= 0 }
 
-      if active_providers.size < provider_no
-        current_providers = active_providers.map { |p| p[0] }
-        next_best_providers = sorted_providers.keys.reject do |provider_name|
-          current_providers.include?(provider_name) || remaining_runtime[provider_name] <= 0
+        if active_providers.empty? || active_providers.size < provider_no
+          available_slots = provider_no - active_providers.size
+          fallback_providers = sorted_providers.reject { |k, _| user_providers.include?(k) || remaining_runtime[k] <= 0 }
+                                     .map { |k, v| [k, v] }
+                                     .take(available_slots)
+
+          fallback_providers.each do |provider|
+            provider[1][:content] = provider[1][:content].reject { |item| already_suggested_content.include?(item[:media_item].id) }
+          end
+
+          active_providers += fallback_providers.reject { |provider| provider[1][:content].empty? }
+
         end
 
-        break if next_best_providers.empty? # Exit if no more providers available
+        monthly_schedule << month_data
+        month_index += 1
 
-        next_best_providers.first(provider_no - active_providers.size).each do |next_provider|
-          active_providers << [next_provider, sorted_providers[next_provider]]
-        end
+        break if active_providers.empty? && remaining_runtime.values.all? { |v| v <= 0 }
       end
-
-      monthly_schedule << month_data
-
-      month_index += 1
-
     end
+
+
     monthly_schedule
+
+
   end
 
 

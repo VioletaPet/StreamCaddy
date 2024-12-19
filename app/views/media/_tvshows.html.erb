@@ -1,38 +1,39 @@
 <!-- app/views/media/_tvshows.html.erb -->
 <div class="tvshows-section" data-filter-target="tvshows">
-  <% if results.any? %>
-    <h1>TV Shows</h1>
-      <div class="row">
-        <% results.each do |show| %>
-          <div class="col-6 col-md-4" data-genre="<%= show['genre'] %>">
-            <div class="card-poster mb-4">
-              <a href="<%= medium_path(id: show['id'], title: show['name']) %>" class="text-decoration-none d-block">
-                <% if show['poster_path'] %>
-                  <img src="https://image.tmdb.org/t/p/w500<%= show['poster_path'] %>" alt="<%= show['name'] %> Poster" class="card-img-top img-fluid rounded">
-                <% else %>
-                  <img src="placeholder.jpg" alt="No poster available" class="card-img-top img-fluid rounded">
-                <% end %>
-              </a>
-              <% media = Media.find_by(api_id: show['id'])%>
-              <div class="card-body d-flex mt-3" data-controller="button" data-url="<%= watchlist_media_path %>", data-media-id="<%= show['id'] %>", data-title="<%= show['name'] %>">
-                <h5 class="card-title" title="<%= show['title'] %>"><%= link_to show['name'], medium_path(id: show['id'], title: show['name']) %></h5>
-              <% if media && current_user.watchlist_media.exists?(media_id: media.id) %>
-                <%= button_tag type: "button", class:"icon-button", disabled: true do %>
-                <i class="fa-solid fa-check" id="index-button"></i>
-                <% end %>
+  <h1>TV Shows</h1>
+    <% if results.empty? %>
+      <p> No TV shows available</p>
+    <% end %>
+    <div class="row">
+      <% results.each do |show| %>
+        <div class="col-6 col-md-4" data-genre="<%= show['genre'] %>">
+          <div class="card-poster mb-4">
+            <a href="<%= medium_path(id: show['id'], title: show['name']) %>" class="text-decoration-none d-block">
+              <% if show['poster_path'] %>
+                <img src="https://image.tmdb.org/t/p/w500<%= show['poster_path'] %>" alt="<%= show['name'] %> Poster" class="card-img-top img-fluid rounded">
               <% else %>
-                <%= button_tag type: "button",
-                    data: { action: "click->button#toggle" },
-                    class: "icon-button" do %>
-                <i data-button-target="button" class="fa-regular fa-plus" id="index-button"></i>
-                <% end %>
+                <img src="placeholder.jpg" alt="No poster available" class="card-img-top img-fluid rounded">
               <% end %>
-            </div>
+            </a>
+            <% media = Media.find_by(api_id: show['id'])%>
+            <div class="card-body d-flex mt-3" data-controller="button" data-url="<%= watchlist_media_path %>", data-media-id="<%= show['id'] %>", data-title="<%= show['name'] %>">
+              <h5 class="card-title" title="<%= show['title'] %>"><%= link_to show['name'], medium_path(id: show['id'], title: show['name']) %></h5>
+            <% if media && current_user.watchlist_media.exists?(media_id: media.id) %>
+              <%= button_tag type: "button", class:"icon-button", disabled: true do %>
+              <i class="fa-solid fa-check" id="index-button"></i>
+              <% end %>
+            <% else %>
+              <%= button_tag type: "button",
+                  data: { action: "click->button#toggle" },
+                  class: "icon-button" do %>
+              <i data-button-target="button" class="fa-regular fa-plus" id="index-button"></i>
+              <% end %>
+            <% end %>
           </div>
         </div>
-        <% end %>
       </div>
-    <% end %>
+      <% end %>
+    </div>
 </div>
 
  <div class="row">
