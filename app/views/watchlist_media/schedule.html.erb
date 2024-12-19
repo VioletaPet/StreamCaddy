@@ -6,12 +6,12 @@
   <% @schedule.each_with_index do |month| %>
     <% displayed_month = today.next_month(month[:month] - 1).strftime("%B") %>
 
-     <div class="month-section">
+    <div class="month-section">
       <div class="month-title d-flex align-items-center">
         <h2><%= displayed_month %></h2>
         <div class="provider-logos ms-3 d-flex">
           <% month[:providers].each do |provider| %>
-       
+
             <% active_provider = WatchProvider.find_by(name: provider[:provider]) %>
             <% if active_provider&.logo.attached? %>
               <div class="provider-logo me-2">
@@ -21,19 +21,17 @@
           <% end %>
         </div>
       </div>
+    <%= link_to schedule_month_watchlist_media_path(month: month[:month], platform_count: @platform_count), class: "poster-link" do%>
       <div class="poster-container">
         <% month[:providers].each do |provider| %>
           <% provider[:content].each do |media| %>
-
-
             <div class="poster">
-               <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
+              <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
             </div>
-
           <% end %>
         <% end %>
       </div>
+    <% end %>
     </div>
   <% end %>
-
 </div>
