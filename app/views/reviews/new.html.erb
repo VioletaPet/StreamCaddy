@@ -1,27 +1,30 @@
-<div class="page-container">
-  <h1 class="m-3 text-center">Write a review</h1>
+<div class="page-container rounded d-flex justify-content-center align-items-center m-5">
+  <div class="review-form-container p-4 rounded shadow">
+    <h1 class="mb-4 text-center">Write a Review</h1>
 
     <%= simple_form_for [@watchlist_item, @review], html: { class: "form" } do |f| %>
-  <% if @review.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@review.errors.count, "error") %> prohibited this review from being saved:</h2>
-      <ul>
-        <% @review.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+      <% if @review.errors.any? %>
+        <div id="error_explanation" class="alert alert-danger">
+          <h2 class="h6"><%= pluralize(@review.errors.count, "error") %> prohibited this review from being saved:</h2>
+          <ul>
+            <% @review.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-  <div class="container">
-  <div class="form-group">
-    <%= f.input :content, label: "Your Review", as: :text, input_html: { rows: 5 } %>
+      <div class="form-group mb-3">
+        <%= f.input :content, label: "Your Review", as: :text, input_html: { rows: 5, class: "form-control" }, wrapper_html: { class: "mb-3" } %>
+      </div>
+
+      <div class="form-group mb-3">
+        <%= f.input :rating, label: "Rating", as: :select, collection: [1, 2, 3, 4, 5], input_html: { class: "form-select" } %>
+      </div>
+
+      <div class="d-grid">
+        <%= f.submit "Submit", class: "btn btn-primary btn-block" %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="form-group">
-    <%= f.input :rating, label: "Rating", as: :select, collection: [1, 2, 3, 4, 5], class: "costume-input" %>
-  </div>
-
-  <%= f.submit "Submit", class: "submit" %><% end %>
-</div>
 </div>
