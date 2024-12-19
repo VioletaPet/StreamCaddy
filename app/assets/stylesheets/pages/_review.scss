@@ -23,10 +23,13 @@
   color: #FAF7D6;
 }
 
-
 .form-control {
-  color: #FAF7D6 !important;
+  color: #FAF7D6;
   border-color: #666;
+}
+
+.form-control:focus {
+  color: #FAF7D6;
 }
 
 .d-grid {
