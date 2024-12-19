@@ -33,9 +33,15 @@
                 <%= link_to item.media.title, medium_path(item.media.api_id), class: 'text-decoration-none' %>
               </h5>
 
+              <%= link_to new_medium_review_path(item.media_id),
+                          class: 'text-primary p-0 small-icon-button',
+                          style: "font-size: 12px;" do %>
+                <i class="fa-solid fa-star"></i>
+              <% end %>
+
               <!-- Delete Button -->
               <%= link_to watchlist_medium_path(item),
-                          data: { turbo_method: :delete },
+                          data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
                           class: 'icon-button' do %>
                 <i class="fa-solid fa-trash" id="index-button"></i>
               <% end %>
