@@ -15,7 +15,7 @@ class UserProvidersController < ApplicationController
       current_user.watch_provider_ids = []
     end
     if current_user.save
-      redirect_to user_providers_path, notice: "Selections updated successfully!"
+      redirect_to user_providers_path
     else
       flash[:alert] = "Unable to update selections. Please try again."
       render :edit
@@ -33,7 +33,7 @@ class UserProvidersController < ApplicationController
         current_user.user_providers.create!(watch_provider_id: provider_id)
         end
       end
-      redirect_to user_providers_path, notice: "Streaming platforms added successfully!"
+      redirect_to user_providers_path
     else
       redirect_to user_providers_select_path, alert: "Please select at least one streaming platform."
     end
