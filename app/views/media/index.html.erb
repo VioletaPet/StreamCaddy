@@ -37,9 +37,9 @@
         <option value="10768">War & Politics</option>
         <option value="37">Western</option>
       </select>
-      <div class="scroll-box d-flex" data-providers="<%= @user_providers.pluck(:api_id).to_json %>">
+      <div class="scroll-box d-flex" data-controller="clickable" data-clickable-url-value="<%= user_providers_path %>" data-providers="<%= @user_providers.pluck(:api_id).to_json %>">
         <% current_user.watch_providers.each do |provider| %>
-          <div class="provider-logo me-2">
+          <div class="provider-logo">
             <%= cl_image_tag(provider.logo.key, alt: "#{provider.name} Logo", style: "height: 40px; width: auto; object-fit: contain;") %>
           </div>
         <% end %>
@@ -59,4 +59,3 @@
     </div>
 
   </div>
-

@@ -1,4 +1,17 @@
-<div class="schedule-container">
+<div class="schedule-container" style="margin: 20px">
+  <% if @schedule.empty? %>
+  <div class="schedule p-3">
+    <h2 class="text-center mb-3">Generate Your Viewing Schedule</h2>
+    <%= form_with url: schedule_watchlist_media_path, method: :get, local: true, class: "text-center" do |form| %>
+      <div class="form-group mb-3">
+        <%= form.label :platform_count, "How many platforms would you like to subscribe to?", class: "content mb-2" %>
+        <%= form.number_field :platform_count, in: 1..5, step: 1, value: 1, class: "form-control custome-input mx-auto w-auto text-center" %>
+      </div>
+      <%= form.submit "Generate Schedule", class: "submit" %>
+    <% end %>
+  </div>
+  </div>
+  <% else %>
   <% today = Date.today %>
   <% months = Date::MONTHNAMES %>
 
@@ -6,12 +19,12 @@
   <% @schedule.each_with_index do |month| %>
     <% displayed_month = today.next_month(month[:month] - 1).strftime("%B") %>
 
-     <div class="month-section">
+    <div class="month-section">
       <div class="month-title d-flex align-items-center">
         <h2><%= displayed_month %></h2>
         <div class="provider-logos ms-3 d-flex">
           <% month[:providers].each do |provider| %>
-       
+
             <% active_provider = WatchProvider.find_by(name: provider[:provider]) %>
             <% if active_provider&.logo.attached? %>
               <div class="provider-logo me-2">
@@ -21,19 +34,18 @@
           <% end %>
         </div>
       </div>
+    <%= link_to schedule_month_watchlist_media_path(month: month[:month], platform_count: @platform_count), class: "poster-link" do%>
       <div class="poster-container">
         <% month[:providers].each do |provider| %>
           <% provider[:content].each do |media| %>
-
-
             <div class="poster">
-               <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
+              <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
             </div>
-
           <% end %>
         <% end %>
       </div>
+    <% end %>
     </div>
   <% end %>
-
+  <% end %>
 </div>

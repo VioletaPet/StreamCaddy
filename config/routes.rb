@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   resources :watchlist_media, only: [:index, :show, :create, :destroy] do
     collection do
       get :schedule
+      get :schedule_month
     end
   end
 

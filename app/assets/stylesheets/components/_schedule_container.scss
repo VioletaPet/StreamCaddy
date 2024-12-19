@@ -1,9 +1,7 @@
-.schedule-container {
-
-  h2 {
-    color: #FAF7D6;
-  }
+.month-title h2 {
+  color: #FAF7D6 !important;
 }
+
 
 .poster-container {
   background-color: #1a1a1a;
@@ -25,4 +23,59 @@
 
 .poster-container::-webkit-scrollbar {
   display: none;
+}
+
+.schedule-month-container {
+  padding: 10px;
+
+  #monthly-container {
+    background-color: #1a1a1a;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    padding: 10px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+#monthly-poster {
+  margin-bottom: 20px;
+}
+
+.monthly-schedule-provider {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    font-size: smaller;
+    text-align: center;
+  }
+
+  .provider-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    width: 180px;
+  }
+
+  .monthly-provider-logo {
+    margin-right: 10px;
+
+    img {
+      border-radius: 50%;
+    }
+  }
+
+  .provider-buttons button {
+    margin-left: 5px;
+    width: 120px;
+    color: #FAF7D6;
+    background-color: #1a1a1a;
+  }
 }
