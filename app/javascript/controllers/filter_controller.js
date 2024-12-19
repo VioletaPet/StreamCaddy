@@ -36,9 +36,9 @@ export default class extends Controller {
   }
   updateContent(data, mediaType) {
     if (mediaType === "movies") {
-      this.moviesTarget.innerHTML = data.movies_html; // Replace movies content
+      this.moviesTarget.innerHTML = data.movies_html; 
     } else if (mediaType === "tvshows") {
-      this.tvshowsTarget.innerHTML = data.tvshows_html; // Replace TV shows content
+      this.tvshowsTarget.innerHTML = data.tvshows_html;
     }
   }
 
