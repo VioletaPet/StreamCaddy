@@ -1,10 +1,21 @@
+require 'json'
 require_dependency '../services/tmdb_service.rb'
 
 class MediaController < ApplicationController
   def index
-    @watch_providers = WatchProvider.all.pluck(:name, :api_id)
-    @movies = TmdbService.fetch_movies
-    @tvshows = TmdbService.fetch_tv
+    @watch_providers = WatchProvider.all
+    @user_providers = current_user.watch_providers
+    if current_user.watch_providers.empty?
+      @movies = TmdbService.fetch_movies
+      @tvshows = TmdbService.fetch_tv
+    else
+      api_ids = current_user.watch_providers.pluck(:api_id)
+      @user_watch_providers = api_ids.join('|')
+
+      @movies = TmdbService.filter_by_watch_providers('movie', @user_watch_providers)
+      @tvshows = TmdbService.filter_by_watch_providers('tv', @user_watch_providers)
+
+    end
   end
 
   def show
@@ -23,6 +34,35 @@ class MediaController < ApplicationController
 
   def new
     @media = Media.new
+  end
+
+  def filter
+
+    respond_to do |format|
+      format.json do
+
+
+        media_type = params[:media_type]
+        genres = params[:genres] || []
+        watch_providers = params[:watch_providers]&.split('|') || []
+
+
+        @results = TmdbService.filter_by_genre_and_watch_provider(media_type, genres, watch_providers)
+        @movies = @results
+        Rails.logger.info "#{@movies}"
+        if media_type == "movies"
+          @movies = @results
+          render partial: "movies", locals: { results: @movies }
+        elsif media_type == "tvshows"
+          @tvshows = @results
+          render partial: "movies", locals: { results: @tvshows }
+        end
+
+      format.html do
+        render plain: "This action is only accessible via JSON requests", status: 400
+      end
+    end
+  end
   end
 
   def create

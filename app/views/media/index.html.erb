@@ -1,109 +1,66 @@
 <div class="container mt-3" data-controller="filter">
   <div class="filter d-flex">
-    <select id="filter-dropdown" class="form-select" data-action="change->filter#filterContent">
+    <select id="filter-dropdown" class="form-select" data-filter-target="filterDropdown" data-action="change->filter#filterContent">
       <option value="all" selected>All</option>
-      <option value="movies">Movies</option>
-      <option value="tvshows">TV Shows</option>
+      <option value="movie">Movies</option>
+      <option value="tv">TV Shows</option>
     </select>
 
-    <select id="genre-dropdown" class="form-select" data-action="change->filter#filterByGenre">
+    <select id="genre-dropdown" class="form-select me-2" data-filter-target="genreDropdown" data-action="change->filter#filterContent">
       <option value="all">All Genres</option>
-      <option value="action-adventure">Action & Adventure</option>
-      <option value="animation">Animation</option>
-      <option value="comedy">Comedy</option>
-      <option value="crime">Crime</option>
-      <option value="documentary">Documentary</option>
-      <option value="drama">Drama</option>
-      <option value="family">Family</option>
-      <option value="kids">Kids</option>
-      <option value="mystery">Mystery</option>
-      <option value="news">News</option>
-      <option value="reality">Reality</option>
-      <option value="sci-fi-fantasy">Sci-Fi & Fantasy</option>
-      <option value="soap">Soap</option>
-      <option value="talk">Talk</option>
-      <option value="war-politics">War & Politics</option>
-      <option value="western">Western</option>
-      <option value="action">Action</option>
-      <option value="adventure">Adventure</option>
-      <option value="fantasy">Fantasy</option>
-      <option value="history">History</option>
-      <option value="horror">Horror</option>
-      <option value="music">Music</option>
-      <option value="romance">Romance</option>
-      <option value="science-fiction">Science Fiction</option>
-      <option value="tv-movie">TV Movie</option>
-      <option value="thriller">Thriller</option>
-      <option value="war">War</option>
+      <option value="28">Action</option>
+      <option value="10759">Action & Adventure</option>
+      <option value="12">Adventure</option>
+      <option value="16">Animation</option>
+      <option value="35">Comedy</option>
+      <option value="80">Crime</option>
+      <option value="99">Documentary</option>
+      <option value="18">Drama</option>
+      <option value="10751">Family</option>
+      <option value="14">Fantasy</option>
+      <option value="36">History</option>
+      <option value="27">Horror</option>
+      <option value="10762">Kids</option>
+      <option value="10402">Music</option>
+      <option value="9648">Mystery</option>
+      <option value="10763">News</option>
+      <option value="10764">Reality</option>
+      <option value="10749">Romance</option>
+      <option value="878">Science Fiction</option>
+      <option value="10765">Sci-Fi & Fantasy</option>
+      <option value="10766">Soap</option>
+      <option value="10767">Talk</option>
+      <option value="10770">TV Movie</option>
+      <option value="53">Thriller</option>
+       <option value="10752">War</option>
+      <option value="10768">War & Politics</option>
+      <option value="37">Western</option>
     </select>
+    <div class="scroll-box d-flex" data-providers="<%= @user_providers.pluck(:api_id).to_json %>">
+      <% current_user.watch_providers.each do |provider| %>
+        <div class="provider-logo me-2">
+          <%= cl_image_tag(provider.logo.key, alt: "#{provider.name} Logo", style: "height: 40px; width: auto; object-fit: contain;") %>
+        </div>
+      <% end %>
+    </div>
   </div>
+  </div>
+
+
 
   <div class="media mt-2">
 
-  <div id="movies-section" data-filter-target="movies">
-    <h1>Movies</h1>
-    <div class="row">
-      <% @movies.each do |movie| %>
-        <div class="col-6 col-md-4" data-genre="<%= movie['genre'] %>">
-          <div class="card-poster mb-4">
-            <% if movie['poster_path'] %>
-              <img src="https://image.tmdb.org/t/p/w500<%= movie['poster_path'] %>" alt="<%= movie['title'] %> Poster" class="card-img-top img-fluid rounded">
-            <% else %>
-              <img src="placeholder.jpg" alt="No poster available" class="card-img-top img-fluid rounded">
-            <% end %>
-            <% media = Media.find_by(api_id: movie['id'])%>
-            <div class="card-body d-flex mt-3" data-controller="button" data-url="<%= watchlist_media_path %>", data-media-id="<%= movie['id'] %>", data-title="<%= movie['title'] %>">
-              <h5 class="card-title" title="<%= movie['title'] %>"><%= link_to movie['title'], medium_path(id: movie['id'], title: movie['title']) %></h5>
-            <% if media && current_user.watchlist_media.exists?(media_id: media.id) %>
-              <%= button_tag type: "button", class:"icon-button", disabled: true do %>
-              <i class="fa-solid fa-check" id="index-button"></i>
-              <% end %>
-            <% else %>
-              <%= button_tag type: "button",
-                  data: { action: "click->button#toggle" },
-                  class: "icon-button" do %>
-              <i data-button-target="button" class="fa-regular fa-plus" id="index-button"></i>
-              <% end %>
-            <% end %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
+ 
+
+  <div data-filter-target="movies" class="movies-container">
+    <%= render partial: "movies", locals: { results: @movies } %>
   </div>
 
-  <div class="tvshows-section" data-filter-target="tvshows">
-    <h1>TV Shows</h1>
-    <div class="row">
-      <% @tvshows.each do |show| %>
-        <div class="col-6 col-md-4" data-genre="<%= show['genre'] %>">
-          <div class="card-poster mb-4">
-            <% if show['poster_path'] %>
-              <img src="https://image.tmdb.org/t/p/w500<%= show['poster_path'] %>" alt="<%= show['name'] %> Poster" class="card-img-top img-fluid rounded">
-            <% else %>
-              <img src="placeholder.jpg" alt="No poster available" class="card-img-top img-fluid rounded">
-            <% end %>
-            <% media = Media.find_by(api_id: show['id'])%>
-            <div class="card-body d-flex mt-3" data-controller="button" data-url="<%= watchlist_media_path %>", data-media-id="<%= show['id'] %>", data-title="<%= show['name'] %>">
-              <h5 class="card-title" title="<%= show['title'] %>"><%= link_to show['name'], medium_path(id: show['id'], title: show['name']) %></h5>
-            <% if media && current_user.watchlist_media.exists?(media_id: media.id) %>
-              <%= button_tag type: "button", class:"icon-button", disabled: true do %>
-              <i class="fa-solid fa-check" id="index-button"></i>
-              <% end %>
-            <% else %>
-              <%= button_tag type: "button",
-                  data: { action: "click->button#toggle" },
-                  class: "icon-button" do %>
-              <i data-button-target="button" class="fa-regular fa-plus" id="index-button"></i>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      <% end %>
-    </div>
+  <div data-filter-target="tvshows" class="tvshows-container">
+    <%= render partial: "tvshows", locals: { results: @tvshows } %>
   </div>
-</div>
+
+
 
   <!-- Search Form -->
   <div class="search mb-4">
