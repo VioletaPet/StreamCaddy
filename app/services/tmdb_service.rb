@@ -243,13 +243,10 @@ class TmdbService
     providers = watch_provider_ids.join('|')
     encoded_providers = CGI.escape(providers)
 
-
-
-
     if genre_ids == 'all'
       url = URI("https://api.themoviedb.org/3/discover/#{media_type}?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=GB&with_watch_providers=#{encoded_providers}")
     else
-    url = URI("https://api.themoviedb.org/3/discover/#{media_type}?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=GB&with_genres=#{genre_ids}&with_watch_providers=#{encoded_providers}")
+      url = URI("https://api.themoviedb.org/3/discover/#{media_type}?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=GB&with_genres=#{genre_ids}&with_watch_providers=#{encoded_providers}")
     end
 
 
@@ -264,6 +261,6 @@ class TmdbService
     json_response = JSON.parse(response.read_body)
 
     json_response['results']
-    
+
   end
 end
