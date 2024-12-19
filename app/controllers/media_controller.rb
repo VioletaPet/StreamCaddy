@@ -40,15 +40,31 @@ class MediaController < ApplicationController
     media_type = params[:media_type]
     genres = params[:genres] || []
     watch_providers = params[:watch_providers]&.split('|') || []
-    @results = TmdbService.filter_by_genre_and_watch_provider(media_type, genres, watch_providers) || []
 
-    respond_to do |format|
-      if media_type == 'movie'
-        format.text { render partial: 'movies', locals: { results: @results }, formats: [:html] }
-      elsif media_type == 'tv'
-        format.text { render partial: 'tvshows', locals: { results: @results }, formats: [:html]}
+    # if media_type == 'all'
+    #   @movie_results = TmdbService.filter_by_genre_and_watch_provider('movie', genres, watch_providers) || []
+    #   @tv_results = TmdbService.filter_by_genre_and_watch_provider('tv', genres, watch_providers) || []
+    # else
+      @results = @movie_results = TmdbService.filter_by_genre_and_watch_provider(media_type, genres, watch_providers) || []
+    # end
+
+
+    # if media_type == 'all'
+    #   respond_to do |format|
+    #     format.text { render partial: 'movies', locals: { results: @movie_results }, formats: [:html] }
+    #     format.text { render partial: 'tvshows', locals: { results: @tv_results }, formats: [:html]}
+    #   end
+    # else
+      respond_to do |format|
+        if media_type == 'movie'
+          format.text { render partial: 'movies', locals: { results: @results }, formats: [:html] }
+          # format.text { render partial: 'tvshows', locals: { results: [] }, formats: [:html]}
+        elsif media_type == 'tv'
+          format.text { render partial: 'tvshows', locals: { results: @results }, formats: [:html]}
+          # format.text { render partial: 'movies', locals: { results: []  }, formats: [:html] }
+        end
       end
-    end
+    # end
   end
 
   def create
