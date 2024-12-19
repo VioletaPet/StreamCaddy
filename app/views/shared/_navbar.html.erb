@@ -1,19 +1,19 @@
 <div class="navbar">
     <%= link_to root_path, class: "navbar-brand d-flex" do %>
-      <%= image_tag "logo.jpeg"%>
+      <%= image_tag "logo.jpeg", class: "brand-logo"%>
     <% end %>
 
     <div class="avatar">
       <% if user_signed_in? %>
       <%= link_to show_path(current_user) do %>
-        <%= image_tag current_user&.avatar.presence || asset_path('avatar.jpeg'),
+        <%= image_tag current_user&.avatar.presence || asset_path('avatar.jpg'),
           alt: "Profile",
           class: "rounded-circle",
           style: "width: 40px; height: 40px;" %>
       <% end %>
       <% else %>
       <%= link_to new_user_session_path do %>
-        <%= image_tag current_user&.avatar.presence || asset_path('avatar.jpeg'),
+        <%= image_tag current_user&.avatar.presence || asset_path('avatar.jpg'),
           alt: "Profile",
           class: "rounded-circle",
           style: "width: 40px; height: 40px;" %>
