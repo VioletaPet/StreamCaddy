@@ -40,3 +40,17 @@
 .profile-img {
   border-radius: 50%;
 }
+
+.userprofile-provider{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 15px;
+}
+
+.user-provider-logo{
+  width: auto;
+  object-fit: contain;
+  border-radius: 50%;
+  padding: 5px;
+}
