@@ -37,32 +37,18 @@ class MediaController < ApplicationController
   end
 
   def filter
+    media_type = params[:media_type]
+    genres = params[:genres] || []
+    watch_providers = params[:watch_providers]&.split('|') || []
+    @results = TmdbService.filter_by_genre_and_watch_provider(media_type, genres, watch_providers) || []
 
     respond_to do |format|
-      format.json do
-
-
-        media_type = params[:media_type]
-        genres = params[:genres] || []
-        watch_providers = params[:watch_providers]&.split('|') || []
-
-
-        @results = TmdbService.filter_by_genre_and_watch_provider(media_type, genres, watch_providers)
-        @movies = @results
-        Rails.logger.info "#{@movies}"
-        if media_type == "movies"
-          @movies = @results
-          render partial: "movies", locals: { results: @movies }
-        elsif media_type == "tvshows"
-          @tvshows = @results
-          render partial: "movies", locals: { results: @tvshows }
-        end
-
-      format.html do
-        render plain: "This action is only accessible via JSON requests", status: 400
+      if media_type == 'movie'
+        format.text { render partial: 'movies', locals: { results: @results }, formats: [:html] }
+      elsif media_type == 'tv'
+        format.text { render partial: 'tvshows', locals: { results: @results }, formats: [:html]}
       end
     end
-  end
   end
 
   def create

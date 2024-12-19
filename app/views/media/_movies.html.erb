@@ -1,7 +1,12 @@
 <!-- app/views/media/_movies.html.erb -->
 <div id="movies-section" data-filter-target="movies">
+  <h1>Movies</h1>
+  <% if results.empty? %>
+    <p> No movies available</p>
+  <% end %>
+
   <div class="row">
-  <% @movies.each do |movie| %>
+    <% results.each do |movie| %>
         <div class="col-6 col-md-4" data-genre="<%= movie['genre'] %>">
           <div class="card-poster mb-4">
             <a href="<%= medium_path(id: movie['id'], title: movie['name']) %>" class="text-decoration-none d-block">

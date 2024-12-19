@@ -4,6 +4,7 @@ export default class extends Controller {
   static targets = ["filterDropdown", "genreDropdown", "movies", "tvshows"];
 
   connect() {
+    console.log(this.moviesTarget)
     // Parse the @user_providers passed via data attribute
     this.watchProviders = JSON.parse(this.element.querySelector(".scroll-box").dataset.providers);
   }
@@ -27,55 +28,39 @@ export default class extends Controller {
   fetchFilteredContent(mediaType, genres, watchProviders) {
     const genreParam = genres.join("|");
     fetch(`/media/filter?media_type=${mediaType}&genres=${genres.join("|")}&watch_providers=${watchProviders.join("|")}`, {
-      headers: { "X-Requested-With": "XMLHttpRequest" },
+      headers: { "Accept": "text/plain" },
     })
-
-      .then((response) => response.json())
+      .then((response) => response.text())
       .then((data) => this.updateContent(data, mediaType))
       .catch((error) => console.error("Error:", error));
   }
   updateContent(data, mediaType) {
-    if (mediaType === "movies") {
-      this.moviesTarget.innerHTML = data.movies_html; 
-    } else if (mediaType === "tvshows") {
-      this.tvshowsTarget.innerHTML = data.tvshows_html;
+    console.log(this.moviesTarget)
+    if (mediaType === "movie") {
+      this.moviesTarget.innerHTML = data;
+    } else if (mediaType === "tv") {
+      this.tvshowsTarget.innerHTML = data;
     }
   }
 
 
-// filterByGenre(event) {
-//   const selectedGenre = event.target.value;
-
-//   const mediaCards = document.querySelectorAll("[data-genre]");
 
 
-//   mediaCards.forEach((card) => {
-//     const cardGenre = card.dataset.genre;
+  // filterContent(event) {
+  //   const selectedFilter = event.target.value;
 
-
-//     if (selectedGenre === "all" || cardGenre === selectedGenre) {
-//       card.style.display = "block";
-//     } else {
-//       card.style.display = "none";
-//     }
-//   });
-// }
-
-//   filterContent(event) {
-//     const selectedFilter = event.target.value;
-
-//     switch (selectedFilter) {
-//       case "all":
-//         this.showAll();
-//         break;
-//       case "movies":
-//         this.showMovies();
-//         break;
-//       case "tvshows":
-//         this.showTVShows();
-//         break;
-//     }
-//   }
+  //   switch (selectedFilter) {
+  //     case "all":
+  //       this.showAll();
+  //       break;
+  //     case "movies":
+  //       this.showMovies();
+  //       break;
+  //     case "tvshows":
+  //       this.showTVShows();
+  //       break;
+  //   }
+  // }
 
   showAll() {
     this.moviesTarget.style.display = "block";
