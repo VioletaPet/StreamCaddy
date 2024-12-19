@@ -8,7 +8,7 @@
     <% else %>
       <p>No poster available</p>
     <% end %>
-    <% if @media.watch_providers && @media.watch_providers.first.logo.key %>
+    <% if @media.watch_providers.present? && @media.watch_providers.first.logo.key %>
       <div class="watch-provider-logo">
         <%= cl_image_tag(@media.watch_providers.first.logo.key,
                         alt: "#{@media.watch_providers.first.name} Logo",
