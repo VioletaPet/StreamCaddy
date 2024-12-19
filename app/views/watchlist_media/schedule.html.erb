@@ -9,16 +9,17 @@
       <div class="month-title">
         <h2><%= displayed_month %></h2>
       </div>
-      <div class="poster-container">
-        <% month[:providers].each do |provider| %>
-          <% provider[:content].each do |media| %>
-            <div class="poster">
-               <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
-            </div>
+      <%= link_to schedule_month_watchlist_media_path(month: month[:month], platform_count: @platform_count), class: "poster-link" do%>
+        <div class="poster-container">
+          <% month[:providers].each do |provider| %>
+            <% provider[:content].each do |media| %>
+              <div class="poster">
+                <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
+              </div>
+            <% end %>
           <% end %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
   <% end %>
-
 </div>
