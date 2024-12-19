@@ -83,7 +83,6 @@ class WatchlistMediaController < ApplicationController
       @user_selected_providers = user_providers
     else
       @schedule = []
-      flash[:alert] = "Please select a valid number of platforms."
     end
   end
 

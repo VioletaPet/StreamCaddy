@@ -1,19 +1,6 @@
 <div class="container mt-3">
   <!-- Watchlist Title -->
 
-  <!-- Generate Schedule Form -->
-  <div class="schedule p-3">
-    <h2 class="text-center mb-3">Generate Your Viewing Schedule</h2>
-    <%= form_with url: schedule_watchlist_media_path, method: :get, local: true, class: "text-center" do |form| %>
-      <div class="form-group mb-3">
-        <%= form.label :platform_count, "How many platforms would you like to subscribe to?", class: "content mb-2" %>
-        <%= form.number_field :platform_count, in: 1..5, step: 1, value: 1, class: "form-control custome-input mx-auto w-auto text-center" %>
-      </div>
-      <%= form.submit "Generate Schedule", class: "submit" %>
-    <% end %>
-  </div>
-</div>
-
   <!-- Watchlist Content -->
   <div class="media m-3">
     <div class="row">

@@ -4,7 +4,7 @@
   <% @movies.each do |movie| %>
         <div class="col-6 col-md-4" data-genre="<%= movie['genre'] %>">
           <div class="card-poster mb-4">
-            <a href="<%= medium_path(id: movie['id'], title: movie['name']) %>" class="text-decoration-none d-block">
+            <a href="<%= medium_path(id: movie['id'], title: movie['title']) %>" class="text-decoration-none d-block">
               <% if movie['poster_path'] %>
                 <img src="https://image.tmdb.org/t/p/w500<%= movie['poster_path'] %>" alt="<%= movie['title'] %> Poster" class="card-img-top img-fluid rounded">
               <% else %>
