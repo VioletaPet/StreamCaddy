@@ -79,8 +79,8 @@ class WatchlistMediaController < ApplicationController
     if @platform_count > 0
       media_scores = current_user.calculate_media_scores
       provider_groups = current_user.group_by_provider(media_scores)
-      @schedule = current_user.generate_watchlist(provider_groups, max_providers_per_month: @platform_count)
-
+      @user_selected_providers = user_providers
+      @schedule = current_user.generate_watchlist(provider_groups, { max_providers_per_month: @platform_count }, @user_selected_providers)
       @user_selected_providers = user_providers
     else
       @schedule = []
@@ -93,7 +93,7 @@ class WatchlistMediaController < ApplicationController
     media_scores = current_user.calculate_media_scores
     provider_groups = current_user.group_by_provider(media_scores)
     @schedule = current_user.generate_watchlist(provider_groups, max_providers_per_month: @platform_count)
-    # raise
+
 
     month_data = @schedule&.find { |month| month[:month] == @selected_month }
 

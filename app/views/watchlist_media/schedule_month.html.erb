@@ -1,12 +1,35 @@
-<h1><%= @displayed_month %>'s Schedule</h1>
-
-<% @month_providers.each do |provider| %>
-  <h2><%= provider[:provider_name] %></h2>
-  <div class="poster-container">
-    <% provider[:content].each do |media| %>
-      <div class="poster">
-        <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
+<div class="schedule-month-container mt-1">
+  <h2><%= @displayed_month %>'s Schedule</h2>
+  <div class="row row-cols-2" id="monthly-container">
+    <% @month_providers.each do |provider| %>
+      <% provider[:content].each do |media| %>
+        <div class="col">
+          <div class="poster" id="monthly-poster">
+            <%= image_tag media[:media_item].poster, alt: "#{media[:media_item].title} Poster", class: "img-fluid", id: "poster" %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="monthly-schedule-provider">
+    <h3>Take action!</h3>
+    <p>Based on your preferences, these are the streaming providers you'll need — subscribe to those with relevant content and cancel the ones you no longer need.</p>
+    <% @month_providers.each do |provider| %>
+      <% @active_provider = WatchProvider.find_by(name: provider[:provider]) %>
+      <div class="provider-row">
+        <% if @active_provider&.logo.attached? %>
+          <div class="monthly-provider-logo me-2">
+            <%= image_tag @active_provider.logo, alt: "#{@active_provider.name} Logo", class: "img-fluid", style: "height: 40px; width: auto;" %>
+          </div>
+        <% end %>
+        <div class="provider-buttons">
+          <% if current_user.watch_providers.exists?(id: @active_provider.id) %>
+            <button class="btn btn-primary">Cancel</button>
+          <% else %>
+            <button class="btn btn-primary">Subscribe</button>
+          <% end %>
+        </div>
       </div>
     <% end %>
   </div>
-<% end %>
+</div>
